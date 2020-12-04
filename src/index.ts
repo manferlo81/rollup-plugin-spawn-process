@@ -32,7 +32,7 @@ export interface SpawnProcessOptions extends SpawnOptions {
   command?: string;
   args?: readonly string[];
   key?: string;
-  globalKey?: string;
+  storeGlobal?: string | boolean;
   onBeforeCreate?: (proc: ChildProcess | null) => void;
   onCreated?: (proc: ChildProcess) => void;
 }
@@ -45,20 +45,21 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     command,
     args,
     key,
-    globalKey,
+    storeGlobal,
     onBeforeCreate,
     onCreated,
   } = options;
 
-  const key2 = key || 'spawn-process';
+  const procKey = key || 'spawn-process';
 
   delete options.command;
   delete options.args;
   delete options.key;
-  delete options.globalKey;
+  delete options.storeGlobal;
   delete options.onBeforeCreate;
   delete options.onCreated;
 
+  const globalKey = !storeGlobal ? null : storeGlobal === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : storeGlobal;
   const context = !globalKey ? {} : global[globalKey] || (
     global[globalKey] = {}
   );
@@ -74,10 +75,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
       );
 
       if (onBeforeCreate) {
-        onBeforeCreate(context[key2] || null);
+        onBeforeCreate(context[procKey] || null);
       }
 
-      const proc = context[key2] = spawn(
+      const proc = context[procKey] = spawn(
         command || 'node',
         processArgs,
         options as SpawnOptions,

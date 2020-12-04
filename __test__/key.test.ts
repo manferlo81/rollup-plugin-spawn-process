@@ -3,14 +3,14 @@ import { spawnProcess } from '../src';
 
 test('Should use provided key', async () => {
 
-  let globalKey = 'TEST_GLOBAL_KEY';
-  while (globalKey in global) {
-    globalKey += '_';
+  let storeGlobal = 'TEST_GLOBAL_KEY';
+  while (storeGlobal in global) {
+    storeGlobal += '_';
   }
 
-  const plugin = spawnProcess({ globalKey, key: 'test-key' });
+  const plugin = spawnProcess({ storeGlobal, key: 'test-key' });
 
-  const snapshot = { ...global[globalKey] };
+  const snapshot = { ...global[storeGlobal] };
 
   const build = await rollup({
     input: [],
@@ -20,9 +20,9 @@ test('Should use provided key', async () => {
   });
   await build.write({ dir: 'dist' });
 
-  expect(global[globalKey]).not.toEqual(snapshot);
-  expect(global[globalKey]).toEqual({ ...snapshot, 'test-key': expect.any(Array) as unknown });
-  delete global[globalKey];
+  expect(global[storeGlobal]).not.toEqual(snapshot);
+  expect(global[storeGlobal]).toEqual({ ...snapshot, 'test-key': expect.any(Array) as unknown });
+  delete global[storeGlobal];
 
 });
 
@@ -33,7 +33,7 @@ test('Should use "spawn-process" is no key provided', async () => {
     globalKey += '_';
   }
 
-  const plugin = spawnProcess({ globalKey });
+  const plugin = spawnProcess({ storeGlobal: globalKey });
 
   const snapshot = { ...global[globalKey] };
 
