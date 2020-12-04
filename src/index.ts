@@ -37,17 +37,27 @@ export interface SpawnProcessOptions extends SpawnOptions {
   onCreated?: (proc: ChildProcess) => void;
 }
 
-export function spawnProcess(options: SpawnProcessOptions = {}): Plugin {
+export function spawnProcess(options?: SpawnProcessOptions): Plugin {
+
+  options = options || {};
 
   const {
-    command = 'node',
+    command,
     args,
-    key = 'spawn-process',
+    key,
     globalKey,
     onBeforeCreate,
     onCreated,
-    ...spawnOptions
   } = options;
+
+  const key2 = key || 'spawn-process';
+
+  delete options.command;
+  delete options.args;
+  delete options.key;
+  delete options.globalKey;
+  delete options.onBeforeCreate;
+  delete options.onCreated;
 
   const context = !globalKey ? {} : global[globalKey] || (
     global[globalKey] = {}
@@ -64,13 +74,13 @@ export function spawnProcess(options: SpawnProcessOptions = {}): Plugin {
       );
 
       if (onBeforeCreate) {
-        onBeforeCreate(context[key] || null);
+        onBeforeCreate(context[key2] || null);
       }
 
-      const proc = context[key] = spawn(
-        command,
+      const proc = context[key2] = spawn(
+        command || 'node',
         processArgs,
-        spawnOptions,
+        options as SpawnOptions,
       );
 
       if (onCreated) {
