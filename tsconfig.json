@@ -15,6 +15,7 @@
   "include": [
     "src",
     "__test__",
+    "__mocks__",
     "jest.config.js"
   ],
   "exclude": [

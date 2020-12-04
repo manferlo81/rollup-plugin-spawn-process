@@ -1,11 +1,7 @@
-# bundlib-starter
+# rollup-plugin-spawn-process
 
-My awesome library built using [Bundlib](https://github.com/manferlo81/bundlib)
-
-## README
-
-Edit this file to fit your needs.
+A rollup plugin to spawn a process
 
 ## LICENSE
 
-We DO NOT include a license in this project as it is intended to be used as a template. Generate a LICENSE after you create your project.
+MIT &copy; 2020 [Manuel Fernández](https://github.com/manferlo81)
