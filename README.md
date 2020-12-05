@@ -8,14 +8,6 @@ A rollup plugin to spawn a process
 npm install rollup-plugin-spawn-process
 ```
 
-## Plugin
-
-```typescript
-function spawnProcess({ ...options }): Plugin;
-```
-
-See the [Options](#options) section for available options.
-
 ## Usage
 
 ```javascript
@@ -25,11 +17,13 @@ import { spawnProcess } from 'rollup-plugin-spawn-process';
 export default {
   ...
   plugins: [
-    spawnProcess(options),
+    spawnProcess({ ...options }),
   ],
   ...
 };
 ```
+
+See the [Options](#options) section for available options.
 
 ## Options
 
@@ -51,6 +45,8 @@ default [bundleOutputFile]
 
 The arguments to be passed to the `spawn` method.
 
+If not specified, the plugin will try to find the output file of your bundle or use an empty array if no file found.
+
 ### key
 
 ```typescript
@@ -67,7 +63,13 @@ boolean | string
 default false
 ```
 
-Whether or not to use a global variable to store the process. If a string is passed it will be used as a key to store the process into the global scope.
+Whether or not to use a global variable to store the plugin context. If a string is passed it will be used as a key to store the plugin context into the global scope otherwise "ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT" will be used.
+
+#### The reason behind this option
+
+When rollup is in watch mode and `rollup.config.js` if modified rollup will reload the config file causing plugins to be recreated, it causes the plugin context to be recreated as well, and since the previous process was stored in the previous local plugin context it wont be detected, nor passed to the [`cleanup`](#cleanup) method, nor killed before the new one is created, which will result in two (or more) instances of the running process.
+
+Setting this option to `true` (or a `string`) will prevent this behavior.
 
 ### setup
 
@@ -85,9 +87,9 @@ Usually used for process setup such as adding event listeners.
 function (process: ChildProcess): void
 ```
 
-A function to be called right before a process will be created. It will receive the previously created process or null as only argument.
+A function to be called right before a new process will be created. It will receive the previously created process as only argument.
 
-Usually used for process cleanup such as removing event listeners or killing the previous process before a new one is created.
+Usually used for process cleanup such as removing event listeners or some general cleanup before a new process is created.
 
 ## LICENSE
 
