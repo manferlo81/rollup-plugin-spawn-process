@@ -8,8 +8,8 @@ export interface SpawnProcessOptions extends SpawnOptions {
   args?: readonly string[];
   key?: string;
   storeGlobal?: string | boolean;
-  onBeforeCreate?: (proc: ChildProcess | null) => void;
-  onCreated?: (proc: ChildProcess) => void;
+  setup?: (proc: ChildProcess) => void;
+  cleanup?: (proc: ChildProcess | null) => void;
 }
 
 function resolveArgs(
@@ -46,8 +46,8 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     args,
     key,
     storeGlobal,
-    onBeforeCreate,
-    onCreated,
+    cleanup,
+    setup,
   } = options;
 
   const procKey = key || 'spawn-process';
@@ -56,8 +56,8 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   delete options.args;
   delete options.key;
   delete options.storeGlobal;
-  delete options.onBeforeCreate;
-  delete options.onCreated;
+  delete options.setup;
+  delete options.cleanup;
 
   const globalKey = !storeGlobal ? null : storeGlobal === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : storeGlobal;
   const context = !globalKey ? {} : global[globalKey] || (
@@ -68,8 +68,8 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     name: 'spawn-process',
     writeBundle(outputOptions: NormalizedOutputOptions, bundle: OutputBundle) {
 
-      if (onBeforeCreate) {
-        onBeforeCreate(context[procKey] || null);
+      if (cleanup) {
+        cleanup(context[procKey] || null);
       }
 
       const proc = context[procKey] = spawn(
@@ -82,8 +82,8 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         options,
       );
 
-      if (onCreated) {
-        onCreated(proc);
+      if (setup) {
+        setup(proc);
       }
 
     },
