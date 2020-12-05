@@ -60,16 +60,17 @@ The key to be used to store the process into the plugin context.
 
 ```typescript
 boolean | string
-default false
 ```
 
-Whether or not to use a global variable to store the plugin context. If a string is passed it will be used as a key to store the plugin context into the global scope otherwise "ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT" will be used.
+Whether or not to use a global variable to store the plugin context.
+
+If a string is passed it will be used as a key to store the plugin context into the global scope otherwise "ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT" will be used.
+
+If not specified the plugin will infer the correct value base on `process.env.ROLLUP_WATCH` environment variable.
 
 #### The reason behind this option
 
-When rollup is in watch mode and `rollup.config.js` if modified rollup will reload the config file causing plugins to be recreated, it causes the plugin context to be recreated as well, and since the previous process was stored in the previous local plugin context it wont be detected, nor passed to the [`cleanup`](#cleanup) method, nor killed before the new one is created, which will result in two (or more) instances of the running process.
-
-Setting this option to `true` (or a `string`) will prevent this behavior.
+When rollup is in watch mode and `rollup.config.js` is modified rollup will reload the config file causing plugins to be recreated, it causes the plugin context to be recreated as well, and since the previous process was stored in the previous local plugin context it wont be detected, nor passed to the [`cleanup`](#cleanup) method, nor killed before the new one is created, which will result in multiple instances of the running process.
 
 ### setup
 

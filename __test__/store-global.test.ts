@@ -25,3 +25,14 @@ test('Should use global scope with default key', () => {
   expect(global).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
   delete global.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
 });
+
+test('Should infer use of global scope based on env', () => {
+  const { env } = process as { env: Record<string, unknown> };
+  env.ROLLUP_WATCH = 'whatever';
+  const snapshot = { ...global };
+  spawnProcess();
+  expect(global).not.toEqual(snapshot);
+  expect(global).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
+  delete global.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
+  delete env.ROLLUP_WATCH;
+});

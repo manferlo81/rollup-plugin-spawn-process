@@ -59,7 +59,11 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   delete options.setup;
   delete options.cleanup;
 
-  const globalKey = !storeGlobal ? null : storeGlobal === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : storeGlobal;
+  let globalKey: boolean | string | null | undefined = storeGlobal;
+  if (globalKey == null) {
+    globalKey = !!process.env.ROLLUP_WATCH;
+  }
+  globalKey = !globalKey ? null : globalKey === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : globalKey;
   const context = !globalKey ? {} : global[globalKey] || (
     global[globalKey] = {}
   );
