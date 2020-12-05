@@ -14,8 +14,7 @@ test('Should call cleanup', async () => {
   await build.write({ file: 'dist/index.js' });
   await build.write({ file: 'dist/index.js' });
 
-  expect(cleanup).toHaveBeenCalledTimes(2);
-  expect(cleanup).toHaveBeenNthCalledWith(1, null);
-  expect(cleanup).toHaveBeenNthCalledWith(2, ['node', ['dist/index.js'], expect.any(Object)]);
+  expect(cleanup).toHaveBeenCalledTimes(1);
+  expect(cleanup).toHaveBeenCalledWith(['node', ['dist/index.js'], expect.any(Object)]);
 
 });

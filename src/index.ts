@@ -9,7 +9,7 @@ export interface SpawnProcessOptions extends SpawnOptions {
   key?: string;
   storeGlobal?: string | boolean;
   setup?: (proc: ChildProcess) => void;
-  cleanup?: (proc: ChildProcess | null) => void;
+  cleanup?: (proc: ChildProcess) => void;
 }
 
 function resolveArgs(
@@ -68,8 +68,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     name: 'spawn-process',
     writeBundle(outputOptions: NormalizedOutputOptions, bundle: OutputBundle) {
 
-      if (cleanup) {
-        cleanup(context[procKey] || null);
+      const prevProc = context[procKey];
+
+      if (cleanup && prevProc) {
+        cleanup(prevProc);
       }
 
       const proc = context[procKey] = spawn(
