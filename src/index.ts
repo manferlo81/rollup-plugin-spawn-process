@@ -70,8 +70,11 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
       const prevProc = context[procKey];
 
-      if (cleanup && prevProc) {
-        cleanup(prevProc);
+      if (prevProc) {
+        if (cleanup) {
+          cleanup(prevProc);
+        }
+        prevProc.kill();
       }
 
       const proc = context[procKey] = spawn(

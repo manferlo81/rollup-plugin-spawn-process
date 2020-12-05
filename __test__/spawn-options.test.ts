@@ -15,6 +15,9 @@ test('Should pass options to spawn method', async () => {
   await build.write({ file: 'dist/index.js' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', ['dist/index.js'], options]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', ['dist/index.js'], options],
+    killed: false,
+  });
 
 });

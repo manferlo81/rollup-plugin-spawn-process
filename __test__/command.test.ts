@@ -14,7 +14,10 @@ test('Should use "node" if command not provided', async () => {
   await build.write({ file: 'dist/index.js' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', ['dist/index.js'], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', ['dist/index.js'], expect.any(Object)],
+    killed: false,
+  });
 
 });
 
@@ -32,6 +35,9 @@ test('Should use provided command', async () => {
   await build.write({ file: 'dist/index.js' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith([command, ['dist/index.js'], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: [command, ['dist/index.js'], expect.any(Object)],
+    killed: false,
+  });
 
 });

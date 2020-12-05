@@ -21,7 +21,13 @@ test('Should use provided key', async () => {
   await build.write({ dir: 'dist' });
 
   expect(global[storeGlobal]).not.toEqual(snapshot);
-  expect(global[storeGlobal]).toEqual({ ...snapshot, 'test-key': expect.any(Array) as unknown });
+  expect(global[storeGlobal]).toEqual({
+    ...snapshot,
+    'test-key': {
+      args: expect.any(Array) as unknown,
+      killed: false,
+    },
+  });
   delete global[storeGlobal];
 
 });
@@ -46,7 +52,13 @@ test('Should use "spawn-process" is no key provided', async () => {
   await build.write({ dir: 'dist' });
 
   expect(global[globalKey]).not.toEqual(snapshot);
-  expect(global[globalKey]).toEqual({ ...snapshot, 'spawn-process': expect.any(Array) as unknown });
+  expect(global[globalKey]).toEqual({
+    ...snapshot,
+    'spawn-process': {
+      args: expect.any(Array) as unknown,
+      killed: false,
+    },
+  });
   delete global[globalKey];
 
 });

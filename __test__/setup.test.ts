@@ -3,17 +3,27 @@ import { spawnProcess } from '../src';
 
 test('Should call setup', async () => {
 
-  const setup = jest.fn<void, [unknown]>(() => { /*  */ });
+  const setup = jest.fn<void, [Record<string, unknown>]>(({ killed }) => {
+    expect(killed).toBe(false);
+  });
 
   const build = await rollup({
     input: 'src/index.js',
     plugins: [
-      spawnProcess({ setup }),
+      spawnProcess({ setup: setup as never }),
     ],
   });
-  await build.write({ file: 'dist/index.js' });
+  await build.write({ file: 'dist/index1.js' });
+  await build.write({ file: 'dist/index2.js' });
 
-  expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', ['dist/index.js'], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledTimes(2);
+  expect(setup).toHaveBeenNthCalledWith(1, {
+    args: ['node', ['dist/index1.js'], expect.any(Object)],
+    killed: true,
+  });
+  expect(setup).toHaveBeenNthCalledWith(2, {
+    args: ['node', ['dist/index2.js'], expect.any(Object)],
+    killed: false,
+  });
 
 });

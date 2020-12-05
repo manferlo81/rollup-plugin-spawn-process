@@ -15,7 +15,10 @@ test('Should use provided args', async () => {
   await build.write({ file: 'dist/index.js' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', [], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', [], expect.any(Object)],
+    killed: false,
+  });
 
 });
 
@@ -33,7 +36,10 @@ test('Should use output "file" option', async () => {
   await build.write({ file });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', [file], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', [file], expect.any(Object)],
+    killed: false,
+  });
 
 });
 
@@ -50,7 +56,10 @@ test('Should use empty array if no "file" nor "dir" option', async () => {
   await build.write({});
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', [], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', [], expect.any(Object)],
+    killed: false,
+  });
 
 });
 
@@ -67,7 +76,10 @@ test('Should resolve from bundle', async () => {
   await build.write({ dir: 'dist' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', [resolve('dist/index.js')], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', [resolve('dist/index.js')], expect.any(Object)],
+    killed: false,
+  });
 
 });
 
@@ -84,6 +96,9 @@ test('Should use empty array if it cant be resolved', async () => {
   await build.write({ dir: 'dist' });
 
   expect(setup).toHaveBeenCalledTimes(1);
-  expect(setup).toHaveBeenCalledWith(['node', [], expect.any(Object)]);
+  expect(setup).toHaveBeenCalledWith({
+    args: ['node', [], expect.any(Object)],
+    killed: false,
+  });
 
 });

@@ -3,18 +3,23 @@ import { spawnProcess } from '../src';
 
 test('Should call cleanup', async () => {
 
-  const cleanup = jest.fn<void, [unknown]>(() => { /*  */ });
+  const cleanup = jest.fn<void, [Record<string, unknown>]>(({ killed }) => {
+    expect(killed).toBe(false);
+  });
 
   const build = await rollup({
     input: 'src/index.js',
     plugins: [
-      spawnProcess({ cleanup }),
+      spawnProcess({ cleanup: cleanup as never }),
     ],
   });
   await build.write({ file: 'dist/index.js' });
   await build.write({ file: 'dist/index.js' });
 
   expect(cleanup).toHaveBeenCalledTimes(1);
-  expect(cleanup).toHaveBeenCalledWith(['node', ['dist/index.js'], expect.any(Object)]);
+  expect(cleanup).toHaveBeenCalledWith({
+    args: ['node', ['dist/index.js'], expect.any(Object)],
+    killed: true,
+  });
 
 });
