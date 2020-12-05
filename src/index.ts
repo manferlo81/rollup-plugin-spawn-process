@@ -3,6 +3,15 @@ import spawn from 'cross-spawn';
 import { extname, resolve } from 'path';
 import type { NormalizedOutputOptions, OutputBundle, Plugin } from 'rollup';
 
+export interface SpawnProcessOptions extends SpawnOptions {
+  command?: string;
+  args?: readonly string[];
+  key?: string;
+  storeGlobal?: string | boolean;
+  onBeforeCreate?: (proc: ChildProcess | null) => void;
+  onCreated?: (proc: ChildProcess) => void;
+}
+
 function resolveArgs(
   args: readonly string[] | undefined,
   options: NormalizedOutputOptions,
@@ -26,15 +35,6 @@ function resolveArgs(
     .filter((filename): filename is string => !!filename)
     .find((filename) => extname(filename) === '.js');
   return filename ? [resolve(dir, filename)] : [];
-}
-
-export interface SpawnProcessOptions extends SpawnOptions {
-  command?: string;
-  args?: readonly string[];
-  key?: string;
-  storeGlobal?: string | boolean;
-  onBeforeCreate?: (proc: ChildProcess | null) => void;
-  onCreated?: (proc: ChildProcess) => void;
 }
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
@@ -66,13 +66,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   return {
     name: 'spawn-process',
-    writeBundle(options: NormalizedOutputOptions, bundle: OutputBundle) {
-
-      const processArgs = resolveArgs(
-        args,
-        options,
-        bundle,
-      );
+    writeBundle(outputOptions: NormalizedOutputOptions, bundle: OutputBundle) {
 
       if (onBeforeCreate) {
         onBeforeCreate(context[procKey] || null);
@@ -80,8 +74,12 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
       const proc = context[procKey] = spawn(
         command || 'node',
-        processArgs,
-        options as SpawnOptions,
+        resolveArgs(
+          args,
+          outputOptions,
+          bundle,
+        ),
+        options,
       );
 
       if (onCreated) {
