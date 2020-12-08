@@ -4,13 +4,15 @@
   "description": "A rollup plugin to spawn a process",
   "keywords": [],
   "type": "commonjs",
-  "main": "./dist/spawn-process.cjs",
-  "module": "./dist/spawn-process.mjs",
   "exports": {
     "import": "./dist/spawn-process.mjs",
     "default": "./dist/spawn-process.cjs"
   },
+  "main": "./dist/spawn-process.cjs",
+  "module": "./dist/spawn-process.mjs",
+  "jsnext:main": "./dist/spawn-process.mjs",
   "types": "./dist/index.d.ts",
+  "typings": "./dist/index.d.ts",
   "scripts": {
     "clean:cache": "rimraf node_modules/.cache/{bundlib/jest}",
     "clean:build": "rimraf dist coverage",
