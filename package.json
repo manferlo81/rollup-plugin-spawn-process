@@ -2,7 +2,14 @@
   "name": "rollup-plugin-spawn-process",
   "version": "0.0.0",
   "description": "A rollup plugin to spawn a process",
-  "keywords": [],
+  "keywords": [
+    "rollup",
+    "plugin",
+    "rollup-plugin",
+    "spawn",
+    "run",
+    "process"
+  ],
   "type": "commonjs",
   "exports": {
     "import": "./dist/spawn-process.mjs",
