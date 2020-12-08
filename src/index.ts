@@ -5,36 +5,38 @@ import type { NormalizedOutputOptions, OutputBundle, Plugin } from 'rollup';
 
 export interface SpawnProcessOptions extends SpawnOptions {
   command?: string;
+  file?: string | null;
   args?: readonly string[];
   key?: string;
-  storeGlobal?: string | boolean;
+  storeGlobal?: boolean | string;
   setup?: (proc: ChildProcess) => void;
   cleanup?: (proc: ChildProcess) => void;
 }
 
-function resolveArgs(
-  args: readonly string[] | undefined,
+function resolveFile(
   options: NormalizedOutputOptions,
   bundle: OutputBundle,
-): readonly string[] {
-  if (args) {
-    return args;
-  }
+): string | null {
+
   const { file } = options;
   if (file) {
-    return [file];
+    return file;
   }
+
   const { dir } = options;
   if (!dir) {
-    return [];
+    return null;
   }
+
   const filename = Object.values(bundle)
     .map((output): string | null => (
       output.type === 'chunk' ? output.fileName : null
     ))
     .filter((filename): filename is string => !!filename)
     .find((filename) => extname(filename) === '.js');
-  return filename ? [resolve(dir, filename)] : [];
+
+  return filename ? resolve(dir, filename) : null;
+
 }
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
@@ -43,6 +45,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   const {
     command,
+    file,
     args,
     key,
     storeGlobal,
@@ -53,6 +56,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   const procKey = key || 'spawn-process';
 
   delete options.command;
+  delete options.file;
   delete options.args;
   delete options.key;
   delete options.storeGlobal;
@@ -81,13 +85,16 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         prevProc.kill();
       }
 
+      const filename = file || file === null ? file : resolveFile(outputOptions, bundle);
+      const spawnArgs = filename ? [filename] : [];
+
+      if (args) {
+        spawnArgs.push(...args);
+      }
+
       const proc = context[procKey] = spawn(
         command || 'node',
-        resolveArgs(
-          args,
-          outputOptions,
-          bundle,
-        ),
+        spawnArgs,
         options,
       );
 
