@@ -17,7 +17,6 @@ test('Should use provided file', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', ['dist/out.js'], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -38,7 +37,6 @@ test('Should use output "file" option', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [file], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -58,7 +56,6 @@ test('Should ignore if no "file" nor "dir" option', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -78,7 +75,6 @@ test('Should resolve from bundle', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [resolve('dist/index.js')], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -98,7 +94,6 @@ test('Should ignore even if it can resolve from bundle', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -118,7 +113,6 @@ test('Should ignore if it can\'t be resolved', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [], expect.any(Object)],
-    killed: false,
   });
 
 });

@@ -31,13 +31,11 @@ rules:
     - error
     - single
 
-  semi:
-    - error
-    - always
-
   comma-dangle:
     - error
     - always-multiline
+
+  curly: error
 
   no-useless-rename: error
   object-shorthand: error
@@ -47,3 +45,10 @@ rules:
     - max: 1
       maxBOF: 0
       maxEOF: 0
+
+  semi: "off"
+  "@typescript-eslint/semi":
+    - error
+    - always
+
+  "@typescript-eslint/member-delimiter-style": error

@@ -23,7 +23,6 @@ test('Should call setup', async () => {
   });
   expect(setup).toHaveBeenNthCalledWith(2, {
     args: ['node', ['dist/index2.js'], expect.any(Object)],
-    killed: false,
   });
 
 });

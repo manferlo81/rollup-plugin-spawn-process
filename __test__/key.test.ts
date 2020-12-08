@@ -25,7 +25,6 @@ test('Should use provided key', async () => {
     ...snapshot,
     'test-key': {
       args: expect.any(Array) as unknown,
-      killed: false,
     },
   });
   delete global[storeGlobal];
@@ -56,7 +55,6 @@ test('Should use "spawn-process" is no key provided', async () => {
     ...snapshot,
     'spawn-process': {
       args: expect.any(Array) as unknown,
-      killed: false,
     },
   });
   delete global[globalKey];

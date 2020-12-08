@@ -17,7 +17,6 @@ test('Should use provided args', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', args, expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -39,7 +38,6 @@ test('Should use provided args after filename', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', [file, ...args], expect.any(Object)],
-    killed: false,
   });
 
 });

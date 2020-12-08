@@ -16,7 +16,6 @@ test('Should use "node" if command not provided', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: ['node', ['dist/index.js'], expect.any(Object)],
-    killed: false,
   });
 
 });
@@ -37,7 +36,6 @@ test('Should use provided command', async () => {
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
     args: [command, ['dist/index.js'], expect.any(Object)],
-    killed: false,
   });
 
 });

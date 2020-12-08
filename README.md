@@ -92,6 +92,21 @@ If not specified the plugin will infer the correct value base on `process.env.RO
 
 When rollup is in watch mode and `rollup.config.js` is modified rollup will reload the config file causing plugins to be recreated, it causes the plugin context to be recreated as well, and since the previous process was stored in the previous local plugin context it wont be detected, nor passed to the [`cleanup`](#cleanup) method, nor killed before the new one is created, which will result in multiple instances of the running process.
 
+### events
+
+```typescript
+{ [event: string]: EventListener };
+Array<{ event: string, listener: EventListener }>;
+```
+
+An object or array with a series of event listeners to be attached to the newly created process.
+
+Use the array notation when you need to attach the events in a particular order.
+
+Events defined with this option will be automatically attached after process is created, right before [`setup`](#setup) is called, and removed before it is killed, right after [`cleanup`](#cleanup) is called.
+
+Events will be removed in the reverse order they were attached.
+
 ### setup
 
 ```typescript
@@ -114,4 +129,4 @@ Usually used for process cleanup such as removing event listeners or some genera
 
 ## LICENSE
 
-MIT &copy; 2020 [Manuel Fernández](https://github.com/manferlo81)
+[MIT](LICENSE) &copy; 2020 [Manuel Fernández](https://github.com/manferlo81)
