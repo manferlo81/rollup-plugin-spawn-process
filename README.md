@@ -4,14 +4,23 @@ A rollup plugin to spawn a process
 
 ## Install
 
+### Using npm
+
 ```bash
 npm install rollup-plugin-spawn-process
+```
+
+### Using yarn
+
+```bash
+yarn add rollup-plugin-spawn-process
 ```
 
 ## Usage
 
 ```javascript
 // rollup.config.js
+
 import { spawnProcess } from 'rollup-plugin-spawn-process';
 
 export default {
