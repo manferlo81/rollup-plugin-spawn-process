@@ -78,7 +78,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     args,
     key,
     storeGlobal,
-    events,
+    events: eventsOption,
     cleanup,
     setup,
   } = options;
@@ -103,29 +103,31 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     global[globalKey] = {}
   );
 
-  const eventList: EventList = !events ? [] : Array.isArray(events) ? events : (Object.keys(events) as Array<keyof EventMap>).map((event) => ({
+  const events: EventList = !eventsOption ? [] : Array.isArray(eventsOption) ? eventsOption : (Object.keys(eventsOption) as Array<keyof EventMap>).map((event) => ({
     event,
-    listener: events[event] as never,
+    listener: eventsOption[event] as never,
   }));
-  const eventListLength = eventList.length;
+  const { length: eventsLength } = events;
 
   return {
     name: 'spawn-process',
     writeBundle(outputOptions, bundle) {
 
-      const prevProc = context[procKey];
+      const stored = context[procKey];
 
-      if (prevProc) {
+      if (stored) {
+        const { proc, events } = stored;
         if (cleanup) {
-          cleanup(prevProc);
+          cleanup(proc);
         }
-        if (eventListLength > 0) {
-          for (let i = eventListLength - 1; i >= 0; i--) {
-            const item = eventList[i];
-            prevProc.off(item.event, item.listener);
+        const { length: eventsLength } = events;
+        if (eventsLength > 0) {
+          for (let i = eventsLength - 1; i >= 0; i--) {
+            const item = events[i];
+            proc.off(item.event, item.listener);
           }
         }
-        prevProc.kill();
+        proc.kill();
       }
 
       const filename = file || file === null ? file : resolveFile(outputOptions, bundle);
@@ -135,18 +137,20 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         spawnArgs.push(...args);
       }
 
-      const proc = context[procKey] = spawn(
+      const proc = spawn(
         command || 'node',
         spawnArgs,
         options,
       );
 
-      if (eventListLength > 0) {
-        for (let i = 0; i < eventListLength; i++) {
-          const item = eventList[i];
+      if (eventsLength > 0) {
+        for (let i = 0; i < eventsLength; i++) {
+          const item = events[i];
           proc.on(item.event, item.listener);
         }
       }
+
+      context[procKey] = { proc, events };
 
       if (setup) {
         setup(proc);

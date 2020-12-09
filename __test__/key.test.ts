@@ -24,7 +24,10 @@ test('Should use provided key', async () => {
   expect(global[storeGlobal]).toEqual({
     ...snapshot,
     'test-key': {
-      args: expect.any(Array) as unknown,
+      proc: {
+        args: expect.any(Array) as unknown,
+      },
+      events: expect.any(Array) as unknown,
     },
   });
   delete global[storeGlobal];
@@ -54,7 +57,10 @@ test('Should use "spawn-process" is no key provided', async () => {
   expect(global[globalKey]).toEqual({
     ...snapshot,
     'spawn-process': {
-      args: expect.any(Array) as unknown,
+      proc: {
+        args: expect.any(Array) as unknown,
+      },
+      events: expect.any(Array) as unknown,
     },
   });
   delete global[globalKey];
