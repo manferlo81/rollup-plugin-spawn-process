@@ -120,12 +120,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         if (cleanup) {
           cleanup(proc);
         }
-        const { length: eventsLength } = events;
-        if (eventsLength > 0) {
-          for (let i = eventsLength - 1; i >= 0; i--) {
-            const item = events[i];
-            proc.off(item.event, item.listener);
-          }
+        const { length } = events;
+        for (let i = length - 1; i >= 0; i--) {
+          const item = events[i];
+          proc.off(item.event, item.listener);
         }
         proc.kill();
       }
@@ -143,11 +141,9 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         options,
       );
 
-      if (eventsLength > 0) {
-        for (let i = 0; i < eventsLength; i++) {
-          const item = events[i];
-          proc.on(item.event, item.listener);
-        }
+      for (let i = 0; i < eventsLength; i++) {
+        const item = events[i];
+        proc.on(item.event, item.listener);
       }
 
       context[procKey] = { proc, events };
