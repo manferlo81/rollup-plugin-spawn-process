@@ -115,16 +115,18 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
       const stored = context[procKey];
 
       if (stored) {
-        const { proc, events } = stored;
+        const { proc: prevProc, events: prevEvents } = stored;
         if (cleanup) {
-          cleanup(proc);
+          cleanup(prevProc);
         }
-        const { length } = events;
-        for (let i = length - 1; i >= 0; i--) {
-          const item = events[i];
-          proc.off(item.event, item.listener);
+        for (let p = prevEvents.length - 1; p >= 0; p--) {
+          const prevItem = prevEvents[p];
+          prevProc.off(
+            prevItem.event,
+            prevItem.listener,
+          );
         }
-        proc.kill();
+        prevProc.kill();
       }
 
       const filename = resolveFilename(
@@ -144,8 +146,11 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
       );
 
       for (let i = 0; i < eventsLength; i++) {
-        const item = events[i];
-        proc.on(item.event, item.listener);
+        const eventItem = events[i];
+        proc.on(
+          eventItem.event,
+          eventItem.listener,
+        );
       }
 
       context[procKey] = { proc, events };
