@@ -42,32 +42,6 @@ export interface SpawnProcessOptions extends SpawnOptions {
   cleanup?: (proc: ChildProcess) => void;
 }
 
-function resolveFile(
-  options: NormalizedOutputOptions,
-  bundle: OutputBundle,
-): string | null {
-
-  const { file } = options;
-  if (file) {
-    return file;
-  }
-
-  const { dir } = options;
-  if (!dir) {
-    return null;
-  }
-
-  const filename = Object.values(bundle)
-    .map((output): string | null => (
-      output.type === 'chunk' ? output.fileName : null
-    ))
-    .filter((filename): filename is string => !!filename)
-    .find((filename) => extname(filename) === '.js');
-
-  return filename ? resolve(dir, filename) : null;
-
-}
-
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   options = options || {};
@@ -93,6 +67,31 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   delete options.events;
   delete options.setup;
   delete options.cleanup;
+
+  const resolveFilename: (options: NormalizedOutputOptions, bundle: OutputBundle) => string | null = (
+    (file || file === null) ? () => file : (options, bundle) => {
+
+      const { file } = options;
+      if (file) {
+        return file;
+      }
+
+      const { dir } = options;
+      if (!dir) {
+        return null;
+      }
+
+      const filename = Object.values(bundle)
+        .map((output): string | null => (
+          output.type === 'chunk' ? output.fileName : null
+        ))
+        .filter((filename): filename is string => !!filename)
+        .find((filename) => extname(filename) === '.js');
+
+      return filename ? resolve(dir, filename) : null;
+
+    }
+  );
 
   let globalKey: boolean | string | null | undefined = storeGlobal;
   if (globalKey == null) {
@@ -128,7 +127,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         proc.kill();
       }
 
-      const filename = file || file === null ? file : resolveFile(outputOptions, bundle);
+      const filename = resolveFilename(
+        outputOptions,
+        bundle,
+      );
       const spawnArgs = filename ? [filename] : [];
 
       if (args) {
