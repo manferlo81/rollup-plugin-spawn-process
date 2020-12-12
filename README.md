@@ -84,7 +84,7 @@ boolean | string
 
 Whether or not to use a global variable to store the plugin context.
 
-If a string is passed it will be used as a key to store the plugin context into the global scope otherwise "ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT" will be used.
+If a string is passed it will be used as a key to store the plugin context into the global scope otherwise `"ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT"` will be used.
 
 If not specified the plugin will infer the correct value base on `process.env.ROLLUP_WATCH` environment variable.
 
@@ -99,13 +99,11 @@ When rollup is in watch mode and `rollup.config.js` is modified rollup will relo
 Array<{ event: string, listener: EventListener }>;
 ```
 
-An object or array with a series of event listeners to be attached to the newly created process.
+An object or array with a series of event listeners to be added to the process.
 
-Use the array notation when you need to attach the events in a particular order.
+Use the array notation if you need to add the events in a particular order. Events will be removed in the reverse order they were added.
 
-Events defined with this option will be automatically attached after process is created, right before [`setup`](#setup) is called, and removed before it is killed, right after [`cleanup`](#cleanup) is called.
-
-Events will be removed in the reverse order they were attached.
+Events defined with this option will be automatically added after the process is created, right before [`setup`](#setup) is called, and removed before it is killed, right after [`cleanup`](#cleanup) is called.
 
 ### setup
 
@@ -113,9 +111,7 @@ Events will be removed in the reverse order they were attached.
 function (process: ChildProcess): void
 ```
 
-A function to be called right after a new process has been created. It will receive the newly created process as only argument.
-
-Usually used for process setup such as adding event listeners.
+A function to be called after a `new process` has been created. It will be called after all [`events`](#events) has been added. It will receive the `new process` as only argument.
 
 ### cleanup
 
@@ -123,9 +119,7 @@ Usually used for process setup such as adding event listeners.
 function (process: ChildProcess): void
 ```
 
-A function to be called right before a new process will be created. It will receive the previously created process as only argument.
-
-Usually used for process cleanup such as removing event listeners or some general cleanup before a new process is created.
+A function to be called before a `new process` is created. It will be called right before all [`events`](#events) are removed and the `previous process` is killed. It will receive the `previous process` as only argument.
 
 ## LICENSE
 
