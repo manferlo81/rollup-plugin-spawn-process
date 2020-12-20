@@ -17,7 +17,9 @@ export interface EventMap {
   message: (message: SerializeCapable, sendHandle: Socket | Server) => void;
 }
 
-export interface EventItemFromMap<K extends keyof EventMap> {
+export type EventType = keyof EventMap;
+
+export interface EventItemFromMap<K extends EventType> {
   event: K;
   listener: EventMap[K];
 }
@@ -76,11 +78,6 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         return file;
       }
 
-      const { dir } = options;
-      if (!dir) {
-        return null;
-      }
-
       const filename = Object.values(bundle)
         .map((output): string | null => (
           output.type === 'chunk' ? output.fileName : null
@@ -88,7 +85,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         .filter((filename): filename is string => !!filename)
         .find((filename) => extname(filename) === '.js');
 
-      return filename ? resolve(dir, filename) : null;
+      return resolve(options.dir as string, filename as string);
 
     }
   );
@@ -102,7 +99,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     global[globalKey] = {}
   );
 
-  const events: EventList = !eventsOption ? [] : Array.isArray(eventsOption) ? eventsOption : (Object.keys(eventsOption) as Array<keyof EventMap>).map((event) => ({
+  const events: EventList = !eventsOption ? [] : Array.isArray(eventsOption) ? eventsOption : (Object.keys(eventsOption) as Array<EventType>).map((event) => ({
     event,
     listener: eventsOption[event] as never,
   }));
