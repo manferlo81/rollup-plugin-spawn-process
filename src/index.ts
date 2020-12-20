@@ -1,7 +1,7 @@
 import type { ChildProcess, SpawnOptions } from 'child_process';
 import spawn from 'cross-spawn';
 import type { Server, Socket } from 'net';
-import { extname, resolve } from 'path';
+import { extname, join } from 'path';
 import type { NormalizedOutputOptions, OutputBundle, Plugin } from 'rollup';
 
 interface SerializeCapableObject {
@@ -58,7 +58,7 @@ function resolveFileFromBuild(options: NormalizedOutputOptions, bundle: OutputBu
     .filter((filename): filename is string => !!filename)
     .find((filename) => extname(filename) === '.js');
 
-  return resolve(
+  return join(
     options.dir as string,
     filename as string,
   );

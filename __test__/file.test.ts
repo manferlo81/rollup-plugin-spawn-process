@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { normalize } from 'path';
 import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
 import { mockCWD } from './tools/mock-cwd';
@@ -62,7 +62,7 @@ test('Should resolve from bundle', async () => {
 
   expect(setup).toHaveBeenCalledTimes(1);
   expect(setup).toHaveBeenCalledWith({
-    args: ['node', [resolve('dist/index.js')], expect.any(Object)],
+    args: ['node', [normalize('dist/index.js')], expect.any(Object)],
   });
 
 });
