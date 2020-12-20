@@ -1,5 +1,6 @@
 import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
+import { mockCWD } from './tools/mock-cwd';
 
 test('Should use provided key', async () => {
 
@@ -7,23 +8,20 @@ test('Should use provided key', async () => {
   while (storeGlobal in global) {
     storeGlobal += '_';
   }
+  const key = 'test-key';
 
-  const plugin = spawnProcess({ storeGlobal, key: 'test-key' });
-
-  const snapshot = { ...global[storeGlobal] };
-
-  const build = await rollup({
-    input: [],
-    plugins: [
-      plugin,
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        spawnProcess({ storeGlobal, key }),
+      ],
+    });
+    await build.write({ dir: 'dist' });
   });
-  await build.write({ dir: 'dist' });
 
-  expect(global[storeGlobal]).not.toEqual(snapshot);
   expect(global[storeGlobal]).toEqual({
-    ...snapshot,
-    'test-key': {
+    [key]: {
       proc: {
         args: expect.any(Array) as unknown,
       },
@@ -34,7 +32,7 @@ test('Should use provided key', async () => {
 
 });
 
-test('Should use "spawn-process" is no key provided', async () => {
+test('Should use "spawn-process" if no key provided', async () => {
 
   let globalKey = 'TEST_GLOBAL_KEY';
   while (globalKey in global) {
@@ -43,19 +41,17 @@ test('Should use "spawn-process" is no key provided', async () => {
 
   const plugin = spawnProcess({ storeGlobal: globalKey });
 
-  const snapshot = { ...global[globalKey] };
-
-  const build = await rollup({
-    input: [],
-    plugins: [
-      plugin,
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        plugin,
+      ],
+    });
+    await build.write({ dir: 'dist' });
   });
-  await build.write({ dir: 'dist' });
 
-  expect(global[globalKey]).not.toEqual(snapshot);
   expect(global[globalKey]).toEqual({
-    ...snapshot,
     'spawn-process': {
       proc: {
         args: expect.any(Array) as unknown,

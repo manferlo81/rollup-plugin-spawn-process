@@ -1,5 +1,6 @@
 import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
+import { mockCWD } from './tools/mock-cwd';
 
 test('Should attach event object', async () => {
 
@@ -13,17 +14,19 @@ test('Should attach event object', async () => {
   const onExit = jest.fn(() => { /*  */ });
   const onMessage = jest.fn(() => { /*  */ });
 
-  const build = await rollup({
-    input: 'src/index.js',
-    plugins: [
-      spawnProcess({
-        setup: setup as never,
-        events: { exit: onExit, message: onMessage },
-      }),
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        spawnProcess({
+          setup: setup as never,
+          events: { exit: onExit, message: onMessage },
+        }),
+      ],
+    });
+    await build.write({ file: 'dist/index1.js' });
+    await build.write({ file: 'dist/index2.js' });
   });
-  await build.write({ file: 'dist/index1.js' });
-  await build.write({ file: 'dist/index2.js' });
 
   expect(setup).toHaveBeenCalledTimes(2);
   expect(setup).toHaveBeenNthCalledWith(1, {
@@ -48,20 +51,22 @@ test('Should attach event object', async () => {
   const onExit = jest.fn(() => { /*  */ });
   const onMessage = jest.fn(() => { /*  */ });
 
-  const build = await rollup({
-    input: 'src/index.js',
-    plugins: [
-      spawnProcess({
-        setup: setup as never,
-        events: [
-          { event: 'exit', listener: onExit },
-          { event: 'message', listener: onMessage },
-        ],
-      }),
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        spawnProcess({
+          setup: setup as never,
+          events: [
+            { event: 'exit', listener: onExit },
+            { event: 'message', listener: onMessage },
+          ],
+        }),
+      ],
+    });
+    await build.write({ file: 'dist/index1.js' });
+    await build.write({ file: 'dist/index2.js' });
   });
-  await build.write({ file: 'dist/index1.js' });
-  await build.write({ file: 'dist/index2.js' });
 
   expect(setup).toHaveBeenCalledTimes(2);
   expect(setup).toHaveBeenNthCalledWith(1, {

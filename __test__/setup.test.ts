@@ -1,5 +1,6 @@
 import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
+import { mockCWD } from './tools/mock-cwd';
 
 test('Should call setup', async () => {
 
@@ -7,14 +8,16 @@ test('Should call setup', async () => {
     expect(killed).toBe(false);
   });
 
-  const build = await rollup({
-    input: 'src/index.js',
-    plugins: [
-      spawnProcess({ setup: setup as never }),
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        spawnProcess({ setup: setup as never }),
+      ],
+    });
+    await build.write({ file: 'dist/index1.js' });
+    await build.write({ file: 'dist/index2.js' });
   });
-  await build.write({ file: 'dist/index1.js' });
-  await build.write({ file: 'dist/index2.js' });
 
   expect(setup).toHaveBeenCalledTimes(2);
   expect(setup).toHaveBeenNthCalledWith(1, {

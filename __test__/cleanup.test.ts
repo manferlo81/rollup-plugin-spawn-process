@@ -1,5 +1,6 @@
 import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
+import { mockCWD } from './tools/mock-cwd';
 
 test('Should call cleanup', async () => {
 
@@ -7,14 +8,16 @@ test('Should call cleanup', async () => {
     expect(killed).toBe(false);
   });
 
-  const build = await rollup({
-    input: 'src/index.js',
-    plugins: [
-      spawnProcess({ cleanup: cleanup as never }),
-    ],
+  await mockCWD(async () => {
+    const build = await rollup({
+      input: 'src/index.js',
+      plugins: [
+        spawnProcess({ cleanup: cleanup as never }),
+      ],
+    });
+    await build.write({ file: 'dist/index.js' });
+    await build.write({ file: 'dist/index.js' });
   });
-  await build.write({ file: 'dist/index.js' });
-  await build.write({ file: 'dist/index.js' });
 
   expect(cleanup).toHaveBeenCalledTimes(1);
   expect(cleanup).toHaveBeenCalledWith({
