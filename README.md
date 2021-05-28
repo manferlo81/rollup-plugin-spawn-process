@@ -1,5 +1,7 @@
 # rollup-plugin-spawn-process
 
+[![codecov](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process/branch/master/graph/badge.svg?token=G2N8MVM8CY)](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process)
+
 A rollup plugin to spawn a process
 
 ## Install
