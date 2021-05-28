@@ -38,7 +38,7 @@ export interface SpawnProcessOptions extends SpawnOptions {
   file?: string | null;
   args?: readonly string[];
   key?: string;
-  storeGlobal?: boolean | string;
+  global?: boolean | string;
   events?: Partial<EventMap> | EventList;
   setup?: (proc: ChildProcess) => void;
   cleanup?: (proc: ChildProcess) => void;
@@ -74,10 +74,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     file,
     args,
     key,
-    storeGlobal,
+    global: storeGlobal,
     events: eventsOption,
-    cleanup,
     setup,
+    cleanup,
   } = options;
 
   const procKey = key || 'spawn-process';
@@ -86,7 +86,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   delete options.file;
   delete options.args;
   delete options.key;
-  delete options.storeGlobal;
+  delete options.global;
   delete options.events;
   delete options.setup;
   delete options.cleanup;
@@ -102,6 +102,7 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     globalKey = !!process.env.ROLLUP_WATCH;
   }
   globalKey = !globalKey ? null : globalKey === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : globalKey;
+
   const context = !globalKey ? {} : global[globalKey] || (
     global[globalKey] = {}
   );

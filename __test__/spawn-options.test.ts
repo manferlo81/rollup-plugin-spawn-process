@@ -38,7 +38,7 @@ test('Should not pass any plugin option to spawn method', async () => {
           file: 'dist/index.js',
           args: [],
           key: 'key',
-          storeGlobal: true,
+          global: true,
           events: {},
           setup,
           cleanup: () => null,

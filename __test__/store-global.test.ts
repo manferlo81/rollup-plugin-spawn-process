@@ -12,7 +12,7 @@ test('Should use global scope with provided key', () => {
     storeGlobal += '_';
   }
   const snapshot = { ...global };
-  spawnProcess({ storeGlobal });
+  spawnProcess({ global: storeGlobal });
   expect(global).not.toEqual(snapshot);
   expect(global).toEqual({ ...snapshot, [storeGlobal]: {} });
   delete global[storeGlobal];
@@ -20,7 +20,7 @@ test('Should use global scope with provided key', () => {
 
 test('Should use global scope with default key', () => {
   const snapshot = { ...global };
-  spawnProcess({ storeGlobal: true });
+  spawnProcess({ global: true });
   expect(global).not.toEqual(snapshot);
   expect(global).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
   delete global.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;

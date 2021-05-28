@@ -76,7 +76,7 @@ default "spawn-process"
 
 The key to be used to store the process into the plugin context.
 
-### storeGlobal
+### global
 
 ```typescript
 boolean | string

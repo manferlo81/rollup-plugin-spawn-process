@@ -14,7 +14,7 @@ test('Should use provided key', async () => {
     const build = await rollup({
       input: 'src/index.js',
       plugins: [
-        spawnProcess({ storeGlobal, key }),
+        spawnProcess({ global: storeGlobal, key }),
       ],
     });
     await build.write({ dir: 'dist' });
@@ -39,7 +39,7 @@ test('Should use "spawn-process" if no key provided', async () => {
     globalKey += '_';
   }
 
-  const plugin = spawnProcess({ storeGlobal: globalKey });
+  const plugin = spawnProcess({ global: globalKey });
 
   await mockCWD(async () => {
     const build = await rollup({
