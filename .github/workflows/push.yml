@@ -66,6 +66,5 @@ jobs:
         uses: codecov/codecov-action@v1.5.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          directory: ./coverage
-          files: ./coverage-final.json
+          files: ./coverage/coverage-final.json
           verbose: true
