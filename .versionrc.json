@@ -1,28 +1,3 @@
 {
-  "header": "# bundlib-starter changelog\n\n## Changes\n",
-  "types": [
-    {
-      "type": "chore"
-    },
-    {
-      "type": "feat",
-      "section": "Features"
-    },
-    {
-      "type": "fix",
-      "section": "Bug Fixes"
-    },
-    {
-      "type": "docs",
-      "section": "Documentation"
-    },
-    {
-      "type": "test",
-      "section": "Tests"
-    },
-    {
-      "type": "BREAKING CHANGE",
-      "section": "Breaking Changes"
-    }
-  ]
+  "header": "# rollup-plugin-spawn-process changelog\n\n## Changes\n"
 }
