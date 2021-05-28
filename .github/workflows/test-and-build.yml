@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Test and Build
+name: Lint, Test and Build
 
 on:
   push:
@@ -13,15 +10,14 @@ on:
 
 jobs:
   build:
-
     strategy:
       matrix:
         os:
           - ubuntu-latest
+          - windows-latest
         node-version:
-          - 10.x
-          - 12.x
-          - 14.x
+          - 12
+          - 14
 
     runs-on: ${{ matrix.os }}
 
@@ -33,6 +29,14 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - run: npm ci
-      - run: npm test
-      - run: npm run build
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
