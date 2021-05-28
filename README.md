@@ -74,7 +74,7 @@ string
 default "spawn-process"
 ```
 
-The key to be used to store the process into the plugin context.
+The key to be used to store the process into the plugin context. This option is required when you have more than one instance of the plugin and you are using a global context, it tells the plugin what process to cleanup and kill.
 
 ### global
 
