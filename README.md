@@ -119,7 +119,7 @@ A function to be called after a `new process` has been created. It will be calle
 function (process: ChildProcess): void
 ```
 
-A function to be called before a `new process` is created. It will be called right before all [`events`](#events) are removed and the `previous process` is killed. It will receive the `previous process` as only argument.
+A function to be called before a `new process` is created. It will be called right before all [`events`](#events) are removed and the `current process` is killed. It will receive the `current process` as only argument.
 
 ## LICENSE
 
