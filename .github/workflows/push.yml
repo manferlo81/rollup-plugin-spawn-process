@@ -47,4 +47,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo upload coverage steps go here
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+      - name: Codecov (Upload coverage)
+        uses: codecov/codecov-action@v1.5.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: ./coverage
+          files: ./coverage-final.json
+          verbose: true
