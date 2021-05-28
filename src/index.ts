@@ -34,14 +34,14 @@ export type EventItem =
 export type EventList = Array<EventItem>;
 
 export interface SpawnProcessOptions extends SpawnOptions {
-  command: string;
-  file: string | null;
-  args: readonly string[];
-  key: string;
-  storeGlobal: boolean | string;
-  events: Partial<EventMap> | EventList;
-  setup: (proc: ChildProcess) => void;
-  cleanup: (proc: ChildProcess) => void;
+  command?: string;
+  file?: string | null;
+  args?: readonly string[];
+  key?: string;
+  storeGlobal?: boolean | string;
+  events?: Partial<EventMap> | EventList;
+  setup?: (proc: ChildProcess) => void;
+  cleanup?: (proc: ChildProcess) => void;
 }
 
 function resolveFileFromBuild(options: NormalizedOutputOptions, bundle: OutputBundle): string {
@@ -65,7 +65,7 @@ function resolveFileFromBuild(options: NormalizedOutputOptions, bundle: OutputBu
 
 }
 
-export function spawnProcess(options?: Partial<SpawnProcessOptions>): Plugin {
+export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   options = options || {};
 
