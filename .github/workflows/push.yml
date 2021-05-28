@@ -1,0 +1,50 @@
+name: Lint, Test and Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  lint_test_build:
+    name: Lint, Test and Build (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+        node-version:
+          - 12
+          - 14
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ matrix.node-version }} on ${{ matrix.os }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint code
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  upload_coverage:
+    name: Upload Coverage
+
+    needs: lint_test_build
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo upload coverage steps go here

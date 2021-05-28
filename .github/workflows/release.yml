@@ -5,8 +5,8 @@ on:
     types: [created]
 
 jobs:
-  run_test:
-    name: Lint, Test and Build
+  lint_test_build:
+    name: Lint, Test and Build (Node.js ${{ matrix.node-version }} on ${{ matrix.os }})
 
     strategy:
       matrix:
@@ -54,7 +54,7 @@ jobs:
   publish-npm:
     name: Publish to npm registry
 
-    needs: run_test
+    needs: lint_test_build
     runs-on: ubuntu-latest
 
     steps:
@@ -92,7 +92,7 @@ jobs:
   publish-gpr:
     name: Publish to Github Packages
 
-    needs: run_test
+    needs: lint_test_build
     runs-on: ubuntu-latest
 
     steps:
