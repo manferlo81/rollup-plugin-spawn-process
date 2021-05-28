@@ -12,7 +12,7 @@ type SerializeCapable = string | SerializeCapableObject | number | boolean;
 export interface EventMap {
   close: (code: number, signal: NodeJS.Signals) => void;
   disconnect: () => void;
-  error: (err: Error) => void;
+  error: (error: Error) => void;
   exit: (code: number | null, signal: NodeJS.Signals | null) => void;
   message: (message: SerializeCapable, sendHandle: Socket | Server) => void;
 }
@@ -124,20 +124,15 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
         if (cleanup) {
           cleanup(prevProc);
         }
-        for (let p = prevEvents.length - 1; p >= 0; p--) {
-          const prevItem = prevEvents[p];
-          prevProc.off(
-            prevItem.event,
-            prevItem.listener,
-          );
+        const { length: prevEventsLength } = prevEvents;
+        for (let p = prevEventsLength - 1; p >= 0; p--) {
+          const { event, listener } = prevEvents[p];
+          prevProc.off(event, listener);
         }
         prevProc.kill();
       }
 
-      const filename = resolveFilename(
-        outputOptions,
-        bundle,
-      );
+      const filename = resolveFilename(outputOptions, bundle);
       const spawnArgs = filename ? [filename] : [];
 
       if (args) {
@@ -151,11 +146,8 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
       );
 
       for (let i = 0; i < eventsLength; i++) {
-        const eventItem = events[i];
-        proc.on(
-          eventItem.event,
-          eventItem.listener,
-        );
+        const { event, listener } = events[i];
+        proc.on(event, listener);
       }
 
       context[procKey] = { proc, events };
