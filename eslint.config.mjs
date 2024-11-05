@@ -13,6 +13,8 @@ const eslintRules = normalizeRules({
 const stylisticRules = normalizeRules('@stylistic', {
   quotes: 'single',
   'linebreak-style': 'windows',
+  'no-extra-parens': 'all',
+  'no-extra-semi': 'error',
   'padded-blocks': 'off',
 });
 

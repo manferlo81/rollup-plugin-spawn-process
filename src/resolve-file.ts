@@ -8,14 +8,13 @@ function resolveFileFromBuild(options: NormalizedOutputOptions, bundle: OutputBu
   // return file if rollup outputting a single file
   if (file) return file;
 
-  // FIXME: filter chunks first, then find file
+  // get list of chunk filenames
+  const filenameList = Object.values(bundle)
+    .filter(({ type }) => type === 'chunk')
+    .map(({ fileName }) => fileName);
+
   // search for filename on output files
-  const filename = Object.values(bundle)
-    .map((output): string | null => (
-      output.type === 'chunk' ? output.fileName : null
-    ))
-    .filter((filename): filename is string => !!filename)
-    .find((filename) => extname(filename) === '.js');
+  const filename = filenameList.find((filename) => extname(filename) === '.js');
 
   // return filename
   return join(
