@@ -58,7 +58,7 @@ A file path to be passed as first argument to the `spawn` method.
 
 If not specified, the plugin will try to find the output file of your bundle.
 
-If set explicitly to `null` it will ignore the file and pass only the argument set by the [`args`](#args) option.
+If set explicitly to `null` it will ignore the file and pass only the arguments set by the [`args`](#args) option.
 
 ### args
 

@@ -1,89 +1,87 @@
 import crossSpawn from 'cross-spawn';
-import type { NormalizedOutputOptions, OutputBundle, Plugin } from 'rollup';
+import type { Plugin } from 'rollup';
+import { getContext } from './context';
 import { normalizeEventList } from './normalize-events';
-import { resolveFileFromBuild } from './resolve-file';
-import type { EventList, ProcessStored, SpawnProcessOptions } from './types';
+import { createFileNameResolver } from './resolve-file';
+import type { SpawnProcessOptions } from './types';
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   options = options || {};
 
   const {
-    command,
+    command: commandOption,
     file,
     args,
     key,
-    global: storeGlobal,
+    global: globalOption,
     events: eventsOption,
     setup,
     cleanup,
     ...spawnOptions
   } = options;
 
-  const procKey = key || 'spawn-process';
+  const command = commandOption || 'node';
+  const contextKey = key || 'spawn-process';
 
-  const resolveFilename: (options: NormalizedOutputOptions, bundle: OutputBundle) => string | null = (
-    (file || file === null)
-      ? () => file
-      : resolveFileFromBuild
-  );
-
-  let globalKey: boolean | string | null | undefined = storeGlobal;
-  if (globalKey == null) {
-    globalKey = !!process.env.ROLLUP_WATCH;
-  }
-  globalKey = !globalKey ? null : globalKey === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : globalKey;
-
-  const g = global as unknown as Record<string, Record<string, ProcessStored>>;
-  const context = !globalKey ? {} : g[globalKey] || (
-    g[globalKey] = {}
-  );
-
-  const events: EventList = normalizeEventList(eventsOption);
-  const { length: eventsLength } = events;
+  const resolveFilename = createFileNameResolver(file);
+  const context = getContext(globalOption);
+  const events = normalizeEventList(eventsOption);
 
   return {
     name: 'spawn-process',
+
     writeBundle(outputOptions, bundle) {
 
-      const stored = context[procKey];
+      // get previous run from context
+      const previousRun = context[contextKey];
 
-      if (stored) {
-        const { proc: prevProc, events: prevEvents } = stored;
-        if (cleanup) {
-          cleanup(prevProc);
-        }
-        const { length: prevEventsLength } = prevEvents;
-        for (let p = prevEventsLength - 1; p >= 0; p--) {
-          const { event, listener } = prevEvents[p];
-          prevProc.off(event, listener);
-        }
-        prevProc.kill();
+      // check if there was a previous run
+      if (previousRun) {
+
+        // get data from previous run
+        const { proc: previousProcess, events: previousEvents } = previousRun;
+
+        // call cleanup function if present
+        cleanup?.(previousProcess);
+
+        // unregister events
+        previousEvents.forEach(({ event, listener }) => {
+          previousProcess.off(event, listener);
+        });
+
+        // kill previous precess
+        previousProcess.kill();
+
       }
 
+      // resolve filename to pass
       const filename = resolveFilename(outputOptions, bundle);
-      const spawnArgs = filename ? [filename] : [];
 
-      if (args) {
-        spawnArgs.push(...args);
-      }
+      // create file argument
+      const fileArg = filename ? [filename] : [];
 
+      // create spawn arguments
+      const spawnArgs = args ? [...fileArg, ...args] : fileArg;
+
+      // create child precess
       const proc = crossSpawn(
-        command || 'node',
+        command,
         spawnArgs,
         spawnOptions,
       );
 
-      for (let i = 0; i < eventsLength; i++) {
-        const { event, listener } = events[i];
+      // register child process events
+      events.forEach(({ event, listener }) => {
         proc.on(event, listener);
-      }
+      });
 
-      context[procKey] = { proc, events };
+      // store current run in context with events in the reverse order
+      const cleanupEvents = [...events].reverse();
+      context[contextKey] = { proc, events: cleanupEvents };
 
-      if (setup) {
-        setup(proc);
-      }
+      // call setup function if present
+      setup?.(proc);
 
     },
   };
