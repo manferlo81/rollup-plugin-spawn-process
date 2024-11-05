@@ -47,7 +47,7 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage-final.json
-          verbose: true
+
 
   job_create_release:
     name: Create GitHub Release
