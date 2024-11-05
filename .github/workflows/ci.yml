@@ -15,6 +15,7 @@ on:
 
 jobs:
   job_test:
+    name: Lint, Test and Build
     uses: ./.github/workflows/test.yml
 
   job_upload_coverage:
