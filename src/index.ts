@@ -31,7 +31,7 @@ export type EventItem =
   | EventItemFromMap<'exit'>
   | EventItemFromMap<'message'>;
 
-export type EventList = Array<EventItem>;
+export type EventList = EventItem[];
 
 export interface SpawnProcessOptions extends SpawnOptions {
   command?: string;
@@ -103,11 +103,17 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
   }
   globalKey = !globalKey ? null : globalKey === true ? 'ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT' : globalKey;
 
-  const context = !globalKey ? {} : global[globalKey] || (
-    global[globalKey] = {}
+  interface ProcessStored {
+    proc: ChildProcess;
+    events: EventList;
+  }
+
+  const g = global as unknown as Record<string, Record<string, ProcessStored >>;
+  const context = !globalKey ? {} : g[globalKey] || (
+    g[globalKey] = {}
   );
 
-  const events: EventList = !eventsOption ? [] : Array.isArray(eventsOption) ? eventsOption : (Object.keys(eventsOption) as Array<EventType>).map((event) => ({
+  const events: EventList = !eventsOption ? [] : Array.isArray(eventsOption) ? eventsOption : (Object.keys(eventsOption) as EventType[]).map((event) => ({
     event,
     listener: eventsOption[event] as never,
   }));

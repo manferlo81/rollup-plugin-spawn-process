@@ -2,10 +2,12 @@ import { rollup } from 'rollup';
 import { spawnProcess } from '../src';
 import { mockCWD } from './tools/mock-cwd';
 
+const globalObject = global as Record<string, unknown>;
+
 test('Should use provided key', async () => {
 
   let storeGlobal = 'TEST_GLOBAL_KEY';
-  while (storeGlobal in global) {
+  while (storeGlobal in globalObject) {
     storeGlobal += '_';
   }
   const key = 'test-key';
@@ -20,7 +22,7 @@ test('Should use provided key', async () => {
     await build.write({ dir: 'dist' });
   });
 
-  expect(global[storeGlobal]).toEqual({
+  expect(globalObject[storeGlobal]).toEqual({
     [key]: {
       proc: {
         args: expect.any(Array) as unknown,
@@ -28,14 +30,14 @@ test('Should use provided key', async () => {
       events: expect.any(Array) as unknown,
     },
   });
-  delete global[storeGlobal];
+  delete globalObject[storeGlobal];
 
 });
 
 test('Should use "spawn-process" if no key provided', async () => {
 
   let globalKey = 'TEST_GLOBAL_KEY';
-  while (globalKey in global) {
+  while (globalKey in globalObject) {
     globalKey += '_';
   }
 
@@ -51,7 +53,7 @@ test('Should use "spawn-process" if no key provided', async () => {
     await build.write({ dir: 'dist' });
   });
 
-  expect(global[globalKey]).toEqual({
+  expect(globalObject[globalKey]).toEqual({
     'spawn-process': {
       proc: {
         args: expect.any(Array) as unknown,
@@ -59,6 +61,6 @@ test('Should use "spawn-process" if no key provided', async () => {
       events: expect.any(Array) as unknown,
     },
   });
-  delete global[globalKey];
+  delete globalObject[globalKey];
 
 });

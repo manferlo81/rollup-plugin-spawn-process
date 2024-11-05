@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
-    "module": "ES2015",
-    "moduleResolution": "Node",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node10",
     "esModuleInterop": true,
     "strict": true,
     "noImplicitAny": true,
@@ -15,8 +15,7 @@
   "include": [
     "src",
     "__test__",
-    "__mocks__",
-    "jest.config.js"
+    "__mocks__"
   ],
   "exclude": [
     "node_modules/**"

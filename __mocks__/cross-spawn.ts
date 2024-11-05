@@ -1,6 +1,5 @@
-import { spawn as spawn2 } from 'child_process';
-
-type Args = Parameters<typeof spawn2>;
+type NodeSpawnFunction = typeof import('node:child_process').spawn;
+type Args = Parameters<NodeSpawnFunction>;
 
 interface FakeChildProcessProto {
   kill: (this: FakeChildProcess) => void;
@@ -36,8 +35,7 @@ const fakeChildProcessProto: FakeChildProcessProto = {
   },
 };
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-function create<K extends object, P extends object | null>(props: K, proto: P): K & P {
+function create<K extends object, P extends object>(props: K, proto: P): K & P {
   return Object.assign(
     Object.create(proto) as P,
     props,
@@ -46,7 +44,7 @@ function create<K extends object, P extends object | null>(props: K, proto: P): 
 
 export function spawn(...args: Args): FakeChildProcess {
   return create(
-    { args },
+    { args: args as never },
     create(
       { listeners: {}, killed: false },
       fakeChildProcessProto,

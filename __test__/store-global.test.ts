@@ -1,38 +1,40 @@
 import { spawnProcess } from '../src';
 
+const globalObject = global as Record<string, unknown>;
+
 test('Should not use global scope by default', () => {
-  const snapshot = { ...global };
+  const snapshot = { ...globalObject };
   spawnProcess();
-  expect(global).toEqual(snapshot);
+  expect(globalObject).toEqual(snapshot);
 });
 
 test('Should use global scope with provided key', () => {
   let storeGlobal = 'TEST_GLOBAL_KEY';
-  while (storeGlobal in global) {
+  while (storeGlobal in globalObject) {
     storeGlobal += '_';
   }
-  const snapshot = { ...global };
+  const snapshot = { ...globalObject };
   spawnProcess({ global: storeGlobal });
-  expect(global).not.toEqual(snapshot);
-  expect(global).toEqual({ ...snapshot, [storeGlobal]: {} });
-  delete global[storeGlobal];
+  expect(globalObject).not.toEqual(snapshot);
+  expect(globalObject).toEqual({ ...snapshot, [storeGlobal]: {} });
+  delete globalObject[storeGlobal];
 });
 
 test('Should use global scope with default key', () => {
-  const snapshot = { ...global };
+  const snapshot = { ...globalObject };
   spawnProcess({ global: true });
-  expect(global).not.toEqual(snapshot);
-  expect(global).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
-  delete global.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
+  expect(globalObject).not.toEqual(snapshot);
+  expect(globalObject).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
+  delete globalObject.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
 });
 
 test('Should infer use of global scope based on env', () => {
   const { env } = process as { env: Record<string, unknown> };
   env.ROLLUP_WATCH = 'whatever';
-  const snapshot = { ...global };
+  const snapshot = { ...globalObject };
   spawnProcess();
-  expect(global).not.toEqual(snapshot);
-  expect(global).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
-  delete global.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
+  expect(globalObject).not.toEqual(snapshot);
+  expect(globalObject).toEqual({ ...snapshot, ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT: {} });
+  delete globalObject.ROLLUP_PLUGIN_SPAWN_PROCESS_CONTEXT;
   delete env.ROLLUP_WATCH;
 });
