@@ -1,16 +1,8 @@
 import crossSpawn from 'cross-spawn';
 import type { NormalizedOutputOptions, OutputBundle, Plugin } from 'rollup';
+import { normalizeEventList } from './normalize-events';
 import { resolveFileFromBuild } from './resolve-file';
-import type { EventItem, EventList, EventType, ProcessStored, SpawnProcessOptions } from './types';
-
-function normalizeEventList(events: SpawnProcessOptions['events']): EventList {
-  if (!events) return [];
-  if (Array.isArray(events)) return events;
-  const entries = Object.entries(events);
-  return entries.map(([a, b]): EventItem => {
-    return { event: a as EventType, listener: b as never };
-  });
-}
+import type { EventList, ProcessStored, SpawnProcessOptions } from './types';
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
