@@ -1,5 +1,5 @@
 type NodeSpawnFunction = typeof import('node:child_process').spawn;
-type Args = Parameters<NodeSpawnFunction>;
+type SpawnArgs = Parameters<NodeSpawnFunction>;
 
 interface FakeChildProcessProto {
   kill: (this: FakeChildProcess) => void;
@@ -8,7 +8,7 @@ interface FakeChildProcessProto {
 }
 
 interface FakeChildProcess extends FakeChildProcessProto {
-  args: Args;
+  args: SpawnArgs;
   killed: boolean;
   listeners: Record<string, unknown[]>;
 }
@@ -42,7 +42,7 @@ function create<K extends object, P extends object>(props: K, proto: P): K & P {
   );
 }
 
-export function spawn(...args: Args): FakeChildProcess {
+export function spawn(...args: SpawnArgs): FakeChildProcess {
   return create(
     { args: args as never },
     create(
