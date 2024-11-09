@@ -1,0 +1,57 @@
+name: Lint, Test and Build
+
+on:
+  workflow_call:
+
+jobs:
+  job_lint:
+    name: Lint
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          NODE_VERSION: 20.x
+
+      - name: Lint
+        run: npm run lint
+
+  job_ci:
+    strategy:
+      matrix:
+        os:
+          - name: Ubuntu
+            image: ubuntu-latest
+          - name: macOS
+            image: macos-latest
+          - name: Windows
+            image: windows-latest
+
+        node-version:
+          - 18.x
+          - 20.x
+
+    name: Test and Build (${{ matrix.os.name }}, Node.js ${{ matrix.node-version }})
+
+    runs-on: ${{ matrix.os.image }}
+    needs: job_lint
+
+    steps:
+      - name: Checkout, Setup Node.js v${{ matrix.node-version }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
+        with:
+          node-version: ${{ matrix.node-version }}
+        env:
+          NODE_VERSION: 20.x
+
+      - name: Test
+        run: npm test
+        env:
+          SKIP_COVERAGE: true
+
+      - name: Build
+        run: npm run build

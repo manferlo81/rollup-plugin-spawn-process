@@ -14,28 +14,24 @@ on:
   workflow_dispatch:
 
 jobs:
-  job_test:
+  job_lint_test_build:
     name: Lint, Test and Build
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/lint-test-build.yml
 
   job_upload_coverage:
     name: Upload Coverage
 
-    needs: job_test
-    if: github.event_name == 'push' && github.ref_type == 'branch'
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref_type == 'branch'
+    needs: job_lint_test_build
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js v20.x
-        uses: actions/setup-node@v4
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
         with:
-          node-version: 20.x
-
-      - name: Install dependencies
-        run: npm ci
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          NODE_VERSION: 20.x
 
       - name: Test
         run: npm test
@@ -52,24 +48,20 @@ jobs:
   job_create_release:
     name: Create GitHub Release
 
-    needs: job_test
-    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    needs: job_lint_test_build
 
     permissions:
       contents: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js v20.x
-        uses: actions/setup-node@v4
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
         with:
-          node-version: 20.x
-
-      - name: Install dependencies
-        run: npm ci
+          node-version: ${{ env.NODE_VERSION }}
+        env:
+          NODE_VERSION: 20.x
 
       - name: Build
         run: npm run build
@@ -87,22 +79,18 @@ jobs:
   job_publish_to_npm:
     name: Publish Package to npm
 
-    needs: job_test
-    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    needs: job_lint_test_build
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js v20.x
-        uses: actions/setup-node@v4
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
-
-      - name: Install dependencies
-        run: npm ci
+        env:
+          NODE_VERSION: 20.x
 
       - name: Build
         run: npm run build
@@ -115,25 +103,21 @@ jobs:
   job_publish_to_gpr:
     name: Publish to Github Packages
 
-    needs: job_test
-    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    needs: job_lint_test_build
 
     permissions:
       packages: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js v20.x
-        uses: actions/setup-node@v4
+      - name: Checkout, Setup Node.js v${{ env.NODE_VERSION }} and Install dependencies
+        uses: manferlo81/action-checkout-node-install@v0
         with:
-          node-version: 20.x
+          node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://npm.pkg.github.com'
-
-      - name: Install dependencies
-        run: npm ci
+        env:
+          NODE_VERSION: 20.x
 
       - name: Build
         run: npm run build
