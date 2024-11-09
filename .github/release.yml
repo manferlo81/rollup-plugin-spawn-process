@@ -16,6 +16,10 @@ changelog:
       labels:
         - bug fix
 
+    - title: Dependencies
+      labels:
+        - dependency change
+
     - title: Other Changes
       labels:
         - change
