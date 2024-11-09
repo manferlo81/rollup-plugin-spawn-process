@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - v*
+      - v*.*.*
 
   pull_request:
     branches:
@@ -44,12 +44,11 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/coverage-final.json
 
-
   job_create_release:
     name: Create GitHub Release
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    if: github.ref_type == 'tag'
     needs: job_lint_test_build
 
     permissions:
@@ -70,17 +69,15 @@ jobs:
         run: npm pack
 
       - name: Create release
-        uses: softprops/action-gh-release@v2
+        uses: manferlo81/action-auto-release@v0
         with:
-          generate_release_notes: true
-          make_latest: true
           files: rollup-plugin-spawn-process-*.tgz
 
   job_publish_to_npm:
     name: Publish Package to npm
 
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+    if: github.ref_type == 'tag'
     needs: job_lint_test_build
 
     steps:
