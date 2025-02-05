@@ -1,10 +1,10 @@
-import pluginJs from '@eslint/js';
-import stylistic from '@stylistic/eslint-plugin';
+import pluginJavascript from '@eslint/js';
+import pluginStylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
 import { config, configs as typescriptConfigs } from 'typescript-eslint';
 
 const javascriptPluginConfig = config({
-  extends: [pluginJs.configs.recommended],
+  extends: [pluginJavascript.configs.recommended],
   rules: normalizeRules({
     'no-useless-rename': 'error',
     'object-shorthand': 'error',
@@ -15,7 +15,7 @@ const javascriptPluginConfig = config({
 
 const stylisticPluginConfig = config({
   extends: [
-    stylistic.configs.customize({
+    pluginStylistic.configs.customize({
       quotes: 'single',
       indent: 2,
       semi: true,
@@ -32,33 +32,31 @@ const stylisticPluginConfig = config({
   }),
 });
 
-const typescriptPluginConfig = config(
-  {
-    extends: [
-      typescriptConfigs.strictTypeChecked,
-      typescriptConfigs.stylisticTypeChecked,
-    ],
-    languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: process.cwd() } },
-    rules: normalizeRules('@typescript-eslint', {
-      'array-type': {
-        default: 'array-simple',
-        readonly: 'array-simple',
-      },
-    }),
-  },
-  {
-    files: ['**/*.{js,cjs,mjs}'],
-    extends: [typescriptConfigs.disableTypeChecked],
-  },
-);
+const typescriptPluginConfig = config({
+  files: ['**/*.ts'],
+  extends: [
+    typescriptConfigs.strictTypeChecked,
+    typescriptConfigs.stylisticTypeChecked,
+  ],
+  languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: process.cwd() } },
+  rules: normalizeRules('@typescript-eslint', {
+    'array-type': {
+      default: 'array-simple',
+      readonly: 'array-simple',
+    },
+  }),
+});
 
 export default config(
-  { files: ['**/*.{js,cjs,mjs,ts}'],
+  {
+    files: ['**/*.{js,cjs,mjs,ts}'],
     ignores: ['dist', 'coverage'],
+    extends: [
+      javascriptPluginConfig,
+      stylisticPluginConfig,
+    ],
     languageOptions: { globals: globals.node },
   },
-  javascriptPluginConfig,
-  stylisticPluginConfig,
   typescriptPluginConfig,
 );
 
