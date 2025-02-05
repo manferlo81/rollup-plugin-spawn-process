@@ -4,6 +4,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should use provided args', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const args = ['1', '2'];
 
@@ -26,6 +27,7 @@ test('Should use provided args', async () => {
 
 test('Should use provided args after filename', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const file = 'dist/index.js';
   const args = ['1', '2'];

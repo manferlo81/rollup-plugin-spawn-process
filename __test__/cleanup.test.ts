@@ -4,6 +4,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should call cleanup', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const cleanup = jest.fn<void, [Record<string, unknown>]>(({ killed }) => {
     expect(killed).toBe(false);
   });

@@ -5,6 +5,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should use provided file', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
 
   await mockCWD(async () => {
@@ -26,6 +27,7 @@ test('Should use provided file', async () => {
 
 test('Should use output "file" option', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const file = 'dist/index.js';
 
@@ -48,6 +50,7 @@ test('Should use output "file" option', async () => {
 
 test('Should resolve from bundle', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
 
   await mockCWD(async () => {
@@ -69,6 +72,7 @@ test('Should resolve from bundle', async () => {
 
 test('Should ignore even if it can resolve from bundle', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
 
   await mockCWD(async () => {

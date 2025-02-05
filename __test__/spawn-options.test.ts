@@ -4,6 +4,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should pass options to spawn method', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const options = { env: { mode: 'production' }, cwd: 'cwd' };
 
@@ -26,6 +27,7 @@ test('Should pass options to spawn method', async () => {
 
 test('Should not pass any plugin option to spawn method', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const options = { env: { mode: 'production' }, cwd: 'cwd' };
 

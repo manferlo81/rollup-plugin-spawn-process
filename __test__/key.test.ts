@@ -30,6 +30,7 @@ test('Should use provided key', async () => {
       events: expect.any(Array) as unknown,
     },
   });
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete globalObject[storeGlobal];
 
 });
@@ -61,6 +62,7 @@ test('Should use "spawn-process" if no key provided', async () => {
       events: expect.any(Array) as unknown,
     },
   });
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete globalObject[globalKey];
 
 });

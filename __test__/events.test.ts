@@ -4,6 +4,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should attach event object', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [Record<string, unknown>]>(({ listeners }) => {
     expect(listeners).toEqual({
       exit: [onExit],
@@ -41,6 +42,7 @@ test('Should attach event object', async () => {
 
 test('Should attach event object', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [Record<string, unknown>]>(({ listeners }) => {
     expect(listeners).toEqual({
       exit: [onExit],

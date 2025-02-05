@@ -10,7 +10,7 @@ interface FakeChildProcessProto {
 interface FakeChildProcess extends FakeChildProcessProto {
   args: SpawnArgs;
   killed: boolean;
-  listeners: Record<string, unknown[]>;
+  listeners: Partial<Record<string, unknown[]>>;
 }
 
 const fakeChildProcessProto: FakeChildProcessProto = {
@@ -18,7 +18,7 @@ const fakeChildProcessProto: FakeChildProcessProto = {
     this.killed = true;
   },
   on(event, listener) {
-    const listeners = this.listeners[event] || (
+    const listeners = this.listeners[event] ?? (
       this.listeners[event] = []
     );
     listeners.push(listener);

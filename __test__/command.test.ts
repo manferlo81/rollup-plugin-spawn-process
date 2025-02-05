@@ -4,6 +4,7 @@ import { mockCWD } from './tools/mock-cwd';
 
 test('Should use "node" if command not provided', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
 
   await mockCWD(async () => {
@@ -27,6 +28,7 @@ test('Should use "node" if command not provided', async () => {
 
 test('Should use provided command', async () => {
 
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [unknown]>(() => { /*  */ });
   const command = 'command';
 

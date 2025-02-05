@@ -17,6 +17,7 @@ test('Should use global scope with provided key', () => {
   spawnProcess({ global: storeGlobal });
   expect(globalObject).not.toEqual(snapshot);
   expect(globalObject).toEqual({ ...snapshot, [storeGlobal]: {} });
+  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
   delete globalObject[storeGlobal];
 });
 

@@ -3,17 +3,6 @@ import stylistic from '@stylistic/eslint-plugin';
 import globals from 'globals';
 import { config, configs as typescriptConfigs } from 'typescript-eslint';
 
-// FIXME: Turn them on or move then to the correct place
-const rulesToFix = {
-  '@stylistic/multiline-ternary': 'off',
-  '@typescript-eslint/prefer-nullish-coalescing': 'off',
-  '@typescript-eslint/no-unnecessary-condition': 'off',
-  '@typescript-eslint/non-nullable-type-assertion-style': 'off',
-  '@typescript-eslint/consistent-indexed-object-style': 'off',
-  '@typescript-eslint/no-dynamic-delete': 'off',
-  '@typescript-eslint/no-invalid-void-type': 'off',
-};
-
 const javascriptPluginConfig = config({
   extends: [pluginJs.configs.recommended],
   rules: normalizeRules({
@@ -70,7 +59,6 @@ export default config(
   javascriptPluginConfig,
   stylisticPluginConfig,
   typescriptPluginConfig,
-  { rules: rulesToFix },
 );
 
 function normalizeRuleEntry(entry) {

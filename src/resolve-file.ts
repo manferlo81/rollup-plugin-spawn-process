@@ -18,8 +18,8 @@ function resolveFileFromBuild(options: NormalizedOutputOptions, bundle: OutputBu
 
   // return filename
   return join(
-    options.dir as string,
-    filename as string,
+    options.dir as unknown as string,
+    filename as unknown as string,
   );
 
 }

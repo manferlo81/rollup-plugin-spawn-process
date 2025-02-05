@@ -7,6 +7,7 @@ import type { SpawnProcessOptions } from './types';
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   options = options || {};
 
   const {
@@ -21,7 +22,9 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     ...spawnOptions
   } = options;
 
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const command = commandOption || 'node';
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const contextKey = key || 'spawn-process';
 
   const resolveFilename = createFileNameResolver(file);
