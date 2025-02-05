@@ -1,6 +1,14 @@
 # rollup-plugin-spawn-process
 
-[![npm](https://img.shields.io/npm/v/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process) [![npm-downloads](https://img.shields.io/npm/dw/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process) [![types](https://img.shields.io/npm/types/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process) [![packagephobia-install](https://flat.badgen.net/packagephobia/install/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process) [![packagephobia-publish](https://flat.badgen.net/packagephobia/publish/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process) [![bundlephobia](https://img.shields.io/bundlephobia/min/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process) [![bundlephobia](https://img.shields.io/bundlephobia/minzip/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process) [![david-deps](https://img.shields.io/david/manferlo81/rollup-plugin-spawn-process?style=flat-square)](https://david-dm.org/manferlo81/rollup-plugin-spawn-process) [![david-dev-deps](https://img.shields.io/david/dev/manferlo81/rollup-plugin-spawn-process?style=flat-square)](https://david-dm.org/manferlo81/rollup-plugin-spawn-process?type=dev) [![david-dev-deps](https://img.shields.io/david/peer/manferlo81/rollup-plugin-spawn-process?style=flat-square)](https://david-dm.org/manferlo81/rollup-plugin-spawn-process?type=peer) [![codecov](https://img.shields.io/codecov/c/gh/manferlo81/rollup-plugin-spawn-process?style=flat-square&token=G2N8MVM8CY)](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process) [![npm-license](https://img.shields.io/npm/l/rollup-plugin-spawn-process?style=flat-square)](LICENSE)
+[![npm](https://img.shields.io/npm/v/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![npm-downloads](https://img.shields.io/npm/dw/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![types](https://img.shields.io/npm/types/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![packagephobia-install](https://flat.badgen.net/packagephobia/install/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process)
+[![packagephobia-publish](https://flat.badgen.net/packagephobia/publish/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process)
+[![bundlephobia](https://img.shields.io/bundlephobia/min/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
+[![bundlephobia](https://img.shields.io/bundlephobia/minzip/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
+[![codecov](https://img.shields.io/codecov/c/gh/manferlo81/rollup-plugin-spawn-process?style=flat-square&token=G2N8MVM8CY)](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process)
+[![npm-license](https://img.shields.io/npm/l/rollup-plugin-spawn-process?style=flat-square)](LICENSE)
 
 A rollup plugin to spawn a process
 
@@ -113,7 +121,7 @@ Events defined with this option will be automatically added after the process is
 function (process: ChildProcess): void
 ```
 
-A function to be called after a `new process` has been created. It will be called after all [`events`](#events) has been added. It will receive the `new process` as only argument.
+A function to be called after a `new process` has been created. It will be called after all [`events`](#events) has been attached. It will receive the `new process` as only argument.
 
 ### cleanup
 
@@ -121,8 +129,8 @@ A function to be called after a `new process` has been created. It will be calle
 function (process: ChildProcess): void
 ```
 
-A function to be called before a `new process` is created. It will be called right before all [`events`](#events) are removed and the `current process` is killed. It will receive the `current process` as only argument.
+A function to be called before a `new process` is created. It will be called right before all [`events`](#events) are detached (removed) and the `current process` is killed. It will receive the `current process` as only argument.
 
 ## LICENSE
 
-[MIT](LICENSE) &copy; 2020 [Manuel Fernández](https://github.com/manferlo81)
+[MIT](LICENSE) &copy; 2025 [Manuel Fernández](https://github.com/manferlo81)
