@@ -1,14 +1,14 @@
 # rollup-plugin-spawn-process
 
-[![npm](https://img.shields.io/npm/v/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
-[![npm-downloads](https://img.shields.io/npm/dw/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
-[![types](https://img.shields.io/npm/types/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![NPM Version](https://img.shields.io/npm/v/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![NPM Downloads](https://img.shields.io/npm/dw/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
+[![NPM Type Definitions](https://img.shields.io/npm/types/rollup-plugin-spawn-process?style=flat-square)](https://www.npmjs.com/package/rollup-plugin-spawn-process)
 [![packagephobia-install](https://flat.badgen.net/packagephobia/install/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process)
 [![packagephobia-publish](https://flat.badgen.net/packagephobia/publish/rollup-plugin-spawn-process)](https://packagephobia.com/result?p=rollup-plugin-spawn-process)
-[![bundlephobia](https://img.shields.io/bundlephobia/min/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
-[![bundlephobia](https://img.shields.io/bundlephobia/minzip/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
-[![codecov](https://img.shields.io/codecov/c/gh/manferlo81/rollup-plugin-spawn-process?style=flat-square&token=G2N8MVM8CY)](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process)
-[![npm-license](https://img.shields.io/npm/l/rollup-plugin-spawn-process?style=flat-square)](LICENSE)
+[![npm bundle size](https://img.shields.io/bundlephobia/min/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
+[![npm bundle size](https://img.shields.io/bundlephobia/minzip/rollup-plugin-spawn-process?style=flat-square)](https://bundlephobia.com/result?p=rollup-plugin-spawn-process)
+[![Codecov](https://img.shields.io/codecov/c/github/manferlo81/rollup-plugin-spawn-process?style=flat-square&token=G2N8MVM8CY)](https://codecov.io/gh/manferlo81/rollup-plugin-spawn-process)
+[![NPM License](https://img.shields.io/npm/l/rollup-plugin-spawn-process?style=flat-square)](LICENSE)
 
 A rollup plugin to spawn a process
 
