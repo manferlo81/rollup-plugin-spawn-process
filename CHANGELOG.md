@@ -4,7 +4,6 @@
 
 ### 0.0.1 (2021-05-28)
 
-
 ### Features
 
 * Call "cleanup" only if there is a process ([61840cb](https://github.com/manferlo81/rollup-plugin-spawn-process/commit/61840cbf78c103e0409c56e653ed0e25474cf140))
@@ -13,7 +12,6 @@
 * Infer use of global scope based on env ([9b4b6f2](https://github.com/manferlo81/rollup-plugin-spawn-process/commit/9b4b6f2ccacfc262de12a6aa87ce5e9825e8cdb2))
 * Kill process after cleanup ([d1a46ea](https://github.com/manferlo81/rollup-plugin-spawn-process/commit/d1a46eac03971f89c922ac3ce588a8291a5eb8ba))
 * Store event for later cleanup ([99e5de9](https://github.com/manferlo81/rollup-plugin-spawn-process/commit/99e5de99f8013604a059c80ffedfc68e5a6a77ed))
-
 
 ### Bug Fixes
 

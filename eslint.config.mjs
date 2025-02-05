@@ -25,7 +25,7 @@ const stylisticPluginConfig = config({
     }),
   ],
   rules: normalizeRules('@stylistic', {
-    'linebreak-style': 'windows',
+    'linebreak-style': 'unix',
     'no-extra-parens': 'all',
     'no-extra-semi': 'error',
     'padded-blocks': 'off',
