@@ -5,7 +5,7 @@ import { config, configs as typescriptConfigs } from 'typescript-eslint';
 
 const javascriptPluginConfig = config(
   pluginJavascript.configs.recommended,
-  normalizeRules({
+  normalizeRulesConfig({
     'no-useless-rename': 'error',
     'object-shorthand': 'error',
     'prefer-template': 'error',
@@ -22,7 +22,7 @@ const stylisticPluginConfig = config(
     quoteProps: 'as-needed',
     braceStyle: '1tbs',
   }),
-  normalizeRules('@stylistic', {
+  normalizeRulesConfig('@stylistic', {
     quotes: 'single',
     'linebreak-style': 'unix',
     'no-extra-parens': 'all',
@@ -35,7 +35,7 @@ const typescriptPluginConfig = config(
   typescriptConfigs.strictTypeChecked,
   typescriptConfigs.stylisticTypeChecked,
   { languageOptions: { parserOptions: { projectService: true, tsconfigRootDir: import.meta.dirname } } },
-  normalizeRules('@typescript-eslint', {
+  normalizeRulesConfig('@typescript-eslint', {
     'array-type': { default: 'array-simple', readonly: 'array-simple' },
   }),
   {
@@ -53,8 +53,8 @@ export default config(
   typescriptPluginConfig,
 );
 
-function normalizeRules(pluginName, rules) {
-  if (!rules && pluginName) return normalizeRules(null, pluginName);
+function normalizeRulesConfig(pluginName, rules) {
+  if (!rules && pluginName) return normalizeRulesConfig(null, pluginName);
   const normalizeEntry = createEntryNormalizer(pluginName);
   const entries = Object.entries(rules).map(normalizeEntry);
   const rulesNormalized = Object.fromEntries(entries);
@@ -77,6 +77,6 @@ function createPluginRuleNameNormalizer(pluginName) {
 
 function normalizeRuleEntry(entry) {
   if (Array.isArray(entry)) return entry;
-  if (['error', 'warn', 'off'].includes(entry)) return entry;
+  if (['error', 'off', 'warn'].includes(entry)) return entry;
   return ['error', entry];
 }
