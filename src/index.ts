@@ -1,4 +1,4 @@
-export { spawnProcess } from './plugin';
+export { spawnProcess } from './plugin'
 export {
   EventItem,
   EventItemFromMap,
@@ -6,4 +6,4 @@ export {
   EventMap,
   EventType,
   SpawnProcessOptions,
-} from './types';
+} from './types'

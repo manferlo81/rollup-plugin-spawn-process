@@ -1,14 +1,14 @@
-import crossSpawn from 'cross-spawn';
-import type { Plugin } from 'rollup';
-import { getContext } from './context';
-import { normalizeEventList } from './normalize-events';
-import { createFileNameResolver } from './resolve-file';
-import type { SpawnProcessOptions } from './types';
+import crossSpawn from 'cross-spawn'
+import type { Plugin } from 'rollup'
+import { getContext } from './context'
+import { normalizeEventList } from './normalize-events'
+import { createFileNameResolver } from './resolve-file'
+import type { SpawnProcessOptions } from './types'
 
 export function spawnProcess(options?: SpawnProcessOptions): Plugin {
 
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  options = options || {};
+  options = options || {}
 
   const {
     command: commandOption,
@@ -20,16 +20,16 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     setup,
     cleanup,
     ...spawnOptions
-  } = options;
+  } = options
 
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const command = commandOption || 'node';
+  const command = commandOption || 'node'
   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const contextKey = key || 'spawn-process';
+  const contextKey = key || 'spawn-process'
 
-  const resolveFilename = createFileNameResolver(file);
-  const context = getContext(globalOption);
-  const events = normalizeEventList(eventsOption);
+  const resolveFilename = createFileNameResolver(file)
+  const context = getContext(globalOption)
+  const events = normalizeEventList(eventsOption)
 
   return {
     name: 'spawn-process',
@@ -37,55 +37,55 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
     writeBundle(outputOptions, bundle) {
 
       // get previous run from context
-      const previousRun = context[contextKey];
+      const previousRun = context[contextKey]
 
       // check if there was a previous run
       if (previousRun) {
 
         // get data from previous run
-        const { proc: previousProcess, events: previousEvents } = previousRun;
+        const { proc: previousProcess, events: previousEvents } = previousRun
 
         // call cleanup function if present
-        cleanup?.(previousProcess);
+        cleanup?.(previousProcess)
 
         // unregister events
         previousEvents.forEach(({ event, listener }) => {
-          previousProcess.off(event, listener);
-        });
+          previousProcess.off(event, listener)
+        })
 
         // kill previous precess
-        previousProcess.kill();
+        previousProcess.kill()
 
       }
 
       // resolve filename to pass
-      const filename = resolveFilename(outputOptions, bundle);
+      const filename = resolveFilename(outputOptions, bundle)
 
       // create file argument
-      const fileArg = filename ? [filename] : [];
+      const fileArg = filename ? [filename] : []
 
       // create spawn arguments
-      const spawnArgs = args ? [...fileArg, ...args] : fileArg;
+      const spawnArgs = args ? [...fileArg, ...args] : fileArg
 
       // create child precess
       const proc = crossSpawn(
         command,
         spawnArgs,
         spawnOptions,
-      );
+      )
 
       // register child process events
       events.forEach(({ event, listener }) => {
-        proc.on(event, listener);
-      });
+        proc.on(event, listener)
+      })
 
       // store current run in context with events in the reverse order
-      const cleanupEvents = [...events].reverse();
-      context[contextKey] = { proc, events: cleanupEvents };
+      const cleanupEvents = [...events].reverse()
+      context[contextKey] = { proc, events: cleanupEvents }
 
       // call setup function if present
-      setup?.(proc);
+      setup?.(proc)
 
     },
-  };
+  }
 }

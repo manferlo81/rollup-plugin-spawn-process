@@ -1,45 +1,45 @@
-type NodeSpawnFunction = typeof import('node:child_process').spawn;
-type SpawnArgs = Parameters<NodeSpawnFunction>;
+type NodeSpawnFunction = typeof import('node:child_process').spawn
+type SpawnArgs = Parameters<NodeSpawnFunction>
 
 interface FakeChildProcessProto {
-  kill: (this: FakeChildProcess) => void;
-  on: (this: FakeChildProcess, event: string, listener: unknown) => void;
-  off: (this: FakeChildProcess, event: string, listener: unknown) => void;
+  kill: (this: FakeChildProcess) => void
+  on: (this: FakeChildProcess, event: string, listener: unknown) => void
+  off: (this: FakeChildProcess, event: string, listener: unknown) => void
 }
 
 interface FakeChildProcess extends FakeChildProcessProto {
-  args: SpawnArgs;
-  killed: boolean;
-  listeners: Partial<Record<string, unknown[]>>;
+  args: SpawnArgs
+  killed: boolean
+  listeners: Partial<Record<string, unknown[]>>
 }
 
 const fakeChildProcessProto: FakeChildProcessProto = {
   kill() {
-    this.killed = true;
+    this.killed = true
   },
   on(event, listener) {
     const listeners = this.listeners[event] ?? (
       this.listeners[event] = []
-    );
-    listeners.push(listener);
+    )
+    listeners.push(listener)
   },
   off(event, listener) {
-    const listeners = this.listeners[event];
+    const listeners = this.listeners[event]
     if (!listeners) {
-      return;
+      return
     }
-    const index = listeners.indexOf(listener);
+    const index = listeners.indexOf(listener)
     if (index >= 0) {
-      listeners.splice(index, 1);
+      listeners.splice(index, 1)
     }
   },
-};
+}
 
 function create<K extends object, P extends object>(props: K, proto: P): K & P {
   return Object.assign(
     Object.create(proto) as P,
     props,
-  );
+  )
 }
 
 export function spawn(...args: SpawnArgs): FakeChildProcess {
@@ -49,7 +49,7 @@ export function spawn(...args: SpawnArgs): FakeChildProcess {
       { listeners: {}, killed: false },
       fakeChildProcessProto,
     ),
-  );
+  )
 }
 
-export default spawn;
+export default spawn

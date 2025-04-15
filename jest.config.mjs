@@ -13,6 +13,6 @@ const config = {
 
   cacheDirectory: 'node_modules/.cache/jest',
   verbose: true,
-};
+}
 
-export default config;
+export default config

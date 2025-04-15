@@ -1,13 +1,13 @@
-import { rollup } from 'rollup';
-import { spawnProcess } from '../src';
-import { mockCWD } from './tools/mock-cwd';
+import { rollup } from 'rollup'
+import { spawnProcess } from '../src'
+import { mockCWD } from './tools/mock-cwd'
 
 test('Should call setup', async () => {
 
   // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
   const setup = jest.fn<void, [Record<string, unknown>]>(({ killed }) => {
-    expect(killed).toBe(false);
-  });
+    expect(killed).toBe(false)
+  })
 
   await mockCWD(async () => {
     const build = await rollup({
@@ -15,18 +15,18 @@ test('Should call setup', async () => {
       plugins: [
         spawnProcess({ setup: setup as never }),
       ],
-    });
-    await build.write({ file: 'dist/index1.js' });
-    await build.write({ file: 'dist/index2.js' });
-  });
+    })
+    await build.write({ file: 'dist/index1.js' })
+    await build.write({ file: 'dist/index2.js' })
+  })
 
-  expect(setup).toHaveBeenCalledTimes(2);
+  expect(setup).toHaveBeenCalledTimes(2)
   expect(setup).toHaveBeenNthCalledWith(1, {
     args: ['node', ['dist/index1.js'], expect.any(Object)],
     killed: true,
-  });
+  })
   expect(setup).toHaveBeenNthCalledWith(2, {
     args: ['node', ['dist/index2.js'], expect.any(Object)],
-  });
+  })
 
-});
+})

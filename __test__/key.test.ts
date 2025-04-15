@@ -1,16 +1,16 @@
-import { rollup } from 'rollup';
-import { spawnProcess } from '../src';
-import { mockCWD } from './tools/mock-cwd';
+import { rollup } from 'rollup'
+import { spawnProcess } from '../src'
+import { mockCWD } from './tools/mock-cwd'
 
-const globalObject = global as Record<string, unknown>;
+const globalObject = global as Record<string, unknown>
 
 test('Should use provided key', async () => {
 
-  let storeGlobal = 'TEST_GLOBAL_KEY';
+  let storeGlobal = 'TEST_GLOBAL_KEY'
   while (storeGlobal in globalObject) {
-    storeGlobal += '_';
+    storeGlobal += '_'
   }
-  const key = 'test-key';
+  const key = 'test-key'
 
   await mockCWD(async () => {
     const build = await rollup({
@@ -18,9 +18,9 @@ test('Should use provided key', async () => {
       plugins: [
         spawnProcess({ global: storeGlobal, key }),
       ],
-    });
-    await build.write({ dir: 'dist' });
-  });
+    })
+    await build.write({ dir: 'dist' })
+  })
 
   expect(globalObject[storeGlobal]).toEqual({
     [key]: {
@@ -29,20 +29,20 @@ test('Should use provided key', async () => {
       },
       events: expect.any(Array) as unknown,
     },
-  });
+  })
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete globalObject[storeGlobal];
+  delete globalObject[storeGlobal]
 
-});
+})
 
 test('Should use "spawn-process" if no key provided', async () => {
 
-  let globalKey = 'TEST_GLOBAL_KEY';
+  let globalKey = 'TEST_GLOBAL_KEY'
   while (globalKey in globalObject) {
-    globalKey += '_';
+    globalKey += '_'
   }
 
-  const plugin = spawnProcess({ global: globalKey });
+  const plugin = spawnProcess({ global: globalKey })
 
   await mockCWD(async () => {
     const build = await rollup({
@@ -50,9 +50,9 @@ test('Should use "spawn-process" if no key provided', async () => {
       plugins: [
         plugin,
       ],
-    });
-    await build.write({ dir: 'dist' });
-  });
+    })
+    await build.write({ dir: 'dist' })
+  })
 
   expect(globalObject[globalKey]).toEqual({
     'spawn-process': {
@@ -61,8 +61,8 @@ test('Should use "spawn-process" if no key provided', async () => {
       },
       events: expect.any(Array) as unknown,
     },
-  });
+  })
   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-  delete globalObject[globalKey];
+  delete globalObject[globalKey]
 
-});
+})
