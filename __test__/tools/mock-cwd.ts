@@ -1,4 +1,4 @@
-import mock from 'mock-fs'
+import mock, { restore as restoreMock } from 'mock-fs'
 
 export async function mockCWD<R>(action: () => R | Promise<R>): Promise<R> {
   mock(
@@ -14,6 +14,6 @@ export async function mockCWD<R>(action: () => R | Promise<R>): Promise<R> {
   try {
     return await action()
   } finally {
-    mock.restore()
+    restoreMock()
   }
 }
