@@ -1,4 +1,6 @@
-type NodeSpawnFunction = typeof import('node:child_process').spawn
+import type { spawn } from 'node:child_process'
+
+type NodeSpawnFunction = typeof spawn
 type SpawnArgs = Parameters<NodeSpawnFunction>
 
 interface FakeChildProcessProto {
@@ -42,7 +44,7 @@ function create<K extends object, P extends object>(props: K, proto: P): K & P {
   )
 }
 
-export function spawn(...args: SpawnArgs): FakeChildProcess {
+export function spawnMock(...args: SpawnArgs): FakeChildProcess {
   return create(
     { args: args as never },
     create(
@@ -52,4 +54,4 @@ export function spawn(...args: SpawnArgs): FakeChildProcess {
   )
 }
 
-export default spawn
+export default spawnMock
