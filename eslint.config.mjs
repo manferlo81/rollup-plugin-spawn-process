@@ -28,7 +28,7 @@ const configPluginJavascript = defineConfig({
     // Style
     'no-var': 'on',
     'prefer-const': 'on',
-    // 'no-unassigned-vars': 'on',
+    'no-unassigned-vars': 'on',
     'prefer-template': 'on',
     'prefer-rest-params': 'on',
     'prefer-spread': 'on',
@@ -113,13 +113,11 @@ const configPluginStylistic = defineConfig({
   }),
   files: FILES_ALL,
   extends: [
-    // eslint-disable-next-line import-x/no-named-as-default-member
     pluginStylistic.configs.customize({
-      indent: 2,
-      semi: false,
       arrowParens: true,
       quoteProps: 'as-needed',
       braceStyle: '1tbs',
+      jsx: false,
     }),
   ],
 })

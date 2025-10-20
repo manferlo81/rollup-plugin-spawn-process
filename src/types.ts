@@ -21,11 +21,11 @@ export interface EventItemFromMap<K extends EventType> {
   listener: EventMap[K]
 }
 
-export type EventItem = EventItemFromMap<'close'> |
-  EventItemFromMap<'disconnect'> |
-  EventItemFromMap<'error'> |
-  EventItemFromMap<'exit'> |
-  EventItemFromMap<'message'>
+export type EventItem = EventItemFromMap<'close'>
+  | EventItemFromMap<'disconnect'>
+  | EventItemFromMap<'error'>
+  | EventItemFromMap<'exit'>
+  | EventItemFromMap<'message'>
 
 export type EventList = EventItem[]
 
