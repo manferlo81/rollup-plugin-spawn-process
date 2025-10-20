@@ -1,7 +1,7 @@
 export { spawnProcess } from './plugin'
 export type {
   EventItem,
-  EventItemFromMap,
+  EventItem as EventItemFromMap,
   EventList,
   EventMap,
   EventType,

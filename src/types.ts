@@ -16,18 +16,12 @@ export interface EventMap {
 
 export type EventType = keyof EventMap
 
-export interface EventItemFromMap<K extends EventType> {
-  event: K
-  listener: EventMap[K]
+interface EventItemFromType<T extends EventType> {
+  event: T
+  listener: EventMap[T]
 }
-
-export type EventItem = EventItemFromMap<'close'>
-  | EventItemFromMap<'disconnect'>
-  | EventItemFromMap<'error'>
-  | EventItemFromMap<'exit'>
-  | EventItemFromMap<'message'>
-
-export type EventList = EventItem[]
+export type EventItem<T extends EventType = EventType> = T extends EventType ? EventItemFromType<T> : never
+export type EventList = readonly EventItem[]
 
 export interface SpawnProcessOptions extends SpawnOptions {
   command?: string
@@ -39,10 +33,3 @@ export interface SpawnProcessOptions extends SpawnOptions {
   setup?: (proc: ChildProcess) => void
   cleanup?: (proc: ChildProcess) => void
 }
-export interface ProcessStored {
-  proc: ChildProcess
-  events: EventList
-}
-
-export type Context = Partial<Record<string, ProcessStored>>
-export type GlobalObject = typeof global & Partial<Record<string, Context>>

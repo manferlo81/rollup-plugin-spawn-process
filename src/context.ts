@@ -1,4 +1,4 @@
-import type { Context, GlobalObject } from './types'
+import type { Context, GlobalObject } from './private-types'
 
 function resolveGlobalKey(option?: string | boolean): string | null {
 
