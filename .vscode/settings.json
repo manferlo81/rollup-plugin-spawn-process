@@ -2,5 +2,7 @@
   "cSpell.words": [
     "bundlib",
     "jsnext"
-  ]
+  ],
+  "liveServer.settings.root": "/coverage",
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
