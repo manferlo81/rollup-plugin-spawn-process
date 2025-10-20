@@ -24,12 +24,12 @@ export type EventItem<T extends EventType = EventType> = T extends EventType ? E
 export type EventList = readonly EventItem[]
 
 export interface SpawnProcessOptions extends SpawnOptions {
-  command?: string
-  file?: string | null
-  args?: readonly string[]
-  key?: string
-  global?: boolean | string
-  events?: Partial<EventMap> | EventList
-  setup?: (proc: ChildProcess) => void
-  cleanup?: (proc: ChildProcess) => void
+  readonly command?: string
+  readonly file?: string | null
+  readonly args?: readonly string[]
+  readonly key?: string
+  readonly global?: boolean | string
+  readonly events?: Partial<EventMap> | EventList
+  readonly setup?: (proc: ChildProcess) => void
+  readonly cleanup?: (proc: ChildProcess) => void
 }
