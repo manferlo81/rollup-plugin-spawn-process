@@ -1,18 +1,75 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
-
 version: 2
 
 updates:
   - package-ecosystem: npm
-    directory: "/"
-    schedule:
-      interval: "daily"
-      timezone: "Asia/Jakarta"
-      time: "07:00"
-    open-pull-requests-limit: 10
-    assignees:
-      - "manferlo81"
     versioning-strategy: increase
+    directory: "/"
+    open-pull-requests-limit: 10
+
+    schedule:
+      interval: daily
+      timezone: Asia/Jakarta
+      time: 07:00
+
+    assignees:
+      - manferlo81
+
+    groups:
+      lint:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - eslint
+          - "@eslint/*"
+          - "@*/eslint-plugin"
+          - eslint-plugin-*
+          - eslint-*
+          - globals
+          - typescript-eslint
+
+      test:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - jest
+          - ts-jest
+          - "@types/jest"
+
+      build:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "@babel/*"
+          - core-js
+          - bundlib
+
+      types:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "@types/*"
+          - typescript
+
+      dev-deps:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
+
+      runtime-deps:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+        patterns:
+          - "*"
