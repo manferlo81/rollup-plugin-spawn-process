@@ -12,11 +12,11 @@ describe('"key" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ global: globalKey, key })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ dir: 'dist' })
+      await write({ dir: 'dist' })
     })
 
     expect(getGlobal(globalKey)).toEqual({
@@ -36,11 +36,11 @@ describe('"key" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ global: globalKey })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ dir: 'dist' })
+      await write({ dir: 'dist' })
     })
 
     expect(getGlobal(globalKey)).toEqual({

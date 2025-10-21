@@ -11,11 +11,11 @@ describe('"args" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup, file: null, args })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ file: 'dist/index.js' })
+      await write({ file: 'dist/index.js' })
     })
 
     expect(setup).toHaveBeenCalledTimes(1)

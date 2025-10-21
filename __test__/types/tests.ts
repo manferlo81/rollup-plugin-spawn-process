@@ -1,19 +1,22 @@
-import type { ChildProcess, SpawnOptions } from 'node:child_process'
-import type { Server, Socket } from 'node:net'
+import type { ChildProcess, SendHandle, Serializable, SpawnOptions } from 'node:child_process'
 import type { Plugin, PluginImpl } from 'rollup'
-import type { EventItem, EventItemFromMap, EventList, EventMap, EventType, SpawnProcessOptions, spawnProcess } from '../../src'
+import type { EventItem, EventItemFromMap, EventList, EventMap, EventType, EventsObject, SpawnProcessOptions, spawnProcess } from '../../src'
 import type { And, AssignableTo, Expect, StrictEquals } from './tools'
 
 type PluginImplementation = typeof spawnProcess
 
 type SetupCleanupCallback = (process: ChildProcess) => void
 
-interface SerializableObject {
-  [K: string]: Serializable
-}
-type Serializable = string | number | boolean | SerializableObject
-
 export type Results = And<[
+  // Aliases
+  Expect<StrictEquals<EventItemFromMap, EventItem>>,
+  Expect<StrictEquals<EventItemFromMap<'close'>, EventItem<'close'>>>,
+  Expect<StrictEquals<EventItemFromMap<'disconnect'>, EventItem<'disconnect'>>>,
+  Expect<StrictEquals<EventItemFromMap<'error'>, EventItem<'error'>>>,
+  Expect<StrictEquals<EventItemFromMap<'exit'>, EventItem<'exit'>>>,
+  Expect<StrictEquals<EventItemFromMap<'message'>, EventItem<'message'>>>,
+  Expect<StrictEquals<EventItemFromMap<'spawn'>, EventItem<'spawn'>>>,
+
   // Implementation
   Expect<StrictEquals<PluginImplementation, PluginImpl<SpawnProcessOptions>>>,
   Expect<StrictEquals<ReturnType<PluginImplementation>, Plugin>>,
@@ -59,45 +62,51 @@ export type Results = And<[
   Expect<AssignableTo<undefined, SpawnProcessOptions['cleanup']>>,
 
   // "events" option
-  Expect<StrictEquals<SpawnProcessOptions['events'], Partial<EventMap> | EventList | undefined>>,
-  Expect<AssignableTo<Partial<EventMap>, SpawnProcessOptions['events']>>,
+  Expect<StrictEquals<SpawnProcessOptions['events'], EventsObject | EventList | undefined>>,
+  Expect<AssignableTo<EventsObject, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<EventMap, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<Record<EventType, () => void>, SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<{ message: EventMap['message'] }, SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<{ error: EventMap['error'] }, SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<{ disconnect: EventMap['disconnect'] }, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<{ close: EventMap['close'] }, SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<{ disconnect: EventMap['disconnect'] }, SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<{ error: EventMap['error'] }, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<{ exit: EventMap['exit'] }, SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<{ message: EventMap['message'] }, SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<{ spawn: EventMap['spawn'] }, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<EventList, SpawnProcessOptions['events']>>,
   Expect<AssignableTo<[], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<EventItem[], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<[EventItem, EventItem], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<readonly EventItem[], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<readonly [EventItem, EventItem], SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<[EventItemFromMap<'message'>], SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<[EventItemFromMap<'error'>], SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<[EventItemFromMap<'disconnect'>], SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<[EventItemFromMap<'close'>], SpawnProcessOptions['events']>>,
-  Expect<AssignableTo<[EventItemFromMap<'exit'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'close'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'disconnect'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'error'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'exit'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'message'>], SpawnProcessOptions['events']>>,
+  Expect<AssignableTo<[EventItem<'spawn'>], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<[{ event: EventType, listener: () => void }], SpawnProcessOptions['events']>>,
   Expect<AssignableTo<undefined, SpawnProcessOptions['events']>>,
 
+  Expect<StrictEquals<EventsObject, Partial<EventMap>>>,
   Expect<StrictEquals<EventList, readonly EventItem[]>>,
-  Expect<StrictEquals<EventItem, EventItemFromMap<'message'> | EventItemFromMap<'error'> | EventItemFromMap<'disconnect'> | EventItemFromMap<'close'> | EventItemFromMap<'exit'>>>,
-  Expect<StrictEquals<EventItemFromMap<'message'>, { event: 'message', listener: EventMap['message'] }>>,
-  Expect<StrictEquals<EventItemFromMap<'error'>, { event: 'error', listener: EventMap['error'] }>>,
-  Expect<StrictEquals<EventItemFromMap<'disconnect'>, { event: 'disconnect', listener: EventMap['disconnect'] }>>,
-  Expect<StrictEquals<EventItemFromMap<'close'>, { event: 'close', listener: EventMap['close'] }>>,
-  Expect<StrictEquals<EventItemFromMap<'exit'>, { event: 'exit', listener: EventMap['exit'] }>>,
+
+  Expect<StrictEquals<EventItem, EventItem<'message'> | EventItem<'error'> | EventItem<'disconnect'> | EventItem<'close'> | EventItem<'exit'> | EventItem<'spawn'>>>,
+  Expect<StrictEquals<EventItem<'close'>, { event: 'close', listener: EventMap['close'] }>>,
+  Expect<StrictEquals<EventItem<'disconnect'>, { event: 'disconnect', listener: EventMap['disconnect'] }>>,
+  Expect<StrictEquals<EventItem<'error'>, { event: 'error', listener: EventMap['error'] }>>,
+  Expect<StrictEquals<EventItem<'exit'>, { event: 'exit', listener: EventMap['exit'] }>>,
+  Expect<StrictEquals<EventItem<'message'>, { event: 'message', listener: EventMap['message'] }>>,
+  Expect<StrictEquals<EventItem<'spawn'>, { event: 'spawn', listener: EventMap['spawn'] }>>,
 
   Expect<AssignableTo<EventMap, object>>,
   Expect<StrictEquals<keyof EventMap, EventType>>,
-  Expect<StrictEquals<EventType, 'message' | 'error' | 'disconnect' | 'close' | 'exit'>>,
-  Expect<StrictEquals<EventMap['message'], (message: Serializable, sendHandle: Socket | Server) => void>>,
-  Expect<StrictEquals<EventMap['error'], (error: Error) => void>>,
+  Expect<StrictEquals<EventType, 'close' | 'disconnect' | 'error' | 'exit' | 'message' | 'spawn'>>,
+  Expect<StrictEquals<EventMap['close'], (code: number | null, signal: NodeJS.Signals | null) => void>>,
   Expect<StrictEquals<EventMap['disconnect'], () => void>>,
-  Expect<StrictEquals<EventMap['close'], (code: number, signal: NodeJS.Signals) => void>>,
+  Expect<StrictEquals<EventMap['error'], (error: Error) => void>>,
   Expect<StrictEquals<EventMap['exit'], (code: number | null, signal: NodeJS.Signals | null) => void>>,
+  Expect<StrictEquals<EventMap['message'], (message: Serializable, sendHandle: SendHandle) => void>>,
+  Expect<StrictEquals<EventMap['spawn'], () => void>>,
 
   // "key" option
   Expect<StrictEquals<SpawnProcessOptions['key'], string | undefined>>,
