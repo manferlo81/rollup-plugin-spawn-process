@@ -11,14 +11,14 @@ describe('"cleanup" option', () => {
     })
 
     await mockCWD(async () => {
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [
           spawnProcess({ cleanup: cleanup as never }),
         ],
       })
-      await build.write({ file: 'dist/index.js' })
-      await build.write({ file: 'dist/index.js' })
+      await write({ file: 'dist/index.js' })
+      await write({ file: 'dist/index.js' })
     })
 
     expect(cleanup).toHaveBeenCalledTimes(1)

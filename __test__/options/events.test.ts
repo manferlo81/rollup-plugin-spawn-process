@@ -23,12 +23,12 @@ describe('"events" option', () => {
           setup: setup as never,
           events: { exit: onExit, message: onMessage },
         })
-        const build = await rollup({
+        const { write } = await rollup({
           input: 'src/index.js',
           plugins: [plugin],
         })
-        await build.write({ file: 'dist/index1.js' })
-        await build.write({ file: 'dist/index2.js' })
+        await write({ file: 'dist/index1.js' })
+        await write({ file: 'dist/index2.js' })
       })
 
       expect(setup).toHaveBeenCalledTimes(2)
@@ -59,20 +59,19 @@ describe('"events" option', () => {
       const onMessage = () => { /*  */ }
 
       await mockCWD(async () => {
-        const build = await rollup({
-          input: 'src/index.js',
-          plugins: [
-            spawnProcess({
-              setup: setup as never,
-              events: [
-                { event: 'exit', listener: onExit },
-                { event: 'message', listener: onMessage },
-              ],
-            }),
+        const plugin = spawnProcess({
+          setup: setup as never,
+          events: [
+            { event: 'exit', listener: onExit },
+            { event: 'message', listener: onMessage },
           ],
         })
-        await build.write({ file: 'dist/index1.js' })
-        await build.write({ file: 'dist/index2.js' })
+        const { write } = await rollup({
+          input: 'src/index.js',
+          plugins: [plugin],
+        })
+        await write({ file: 'dist/index1.js' })
+        await write({ file: 'dist/index2.js' })
       })
 
       expect(setup).toHaveBeenCalledTimes(2)

@@ -12,12 +12,12 @@ describe('"setup" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup: setup as never })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ file: 'dist/index1.js' })
-      await build.write({ file: 'dist/index2.js' })
+      await write({ file: 'dist/index1.js' })
+      await write({ file: 'dist/index2.js' })
     })
 
     expect(setup).toHaveBeenCalledTimes(2)

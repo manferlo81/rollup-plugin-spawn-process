@@ -1,26 +1,14 @@
 import type { ChildProcess, SpawnOptions } from 'node:child_process'
-import type { Server, Socket } from 'node:net'
+import type { ChildProcessEventType, ChildProcessListenerMap } from './child-process'
 
-interface SerializeCapableObject {
-  [K: string]: SerializeCapable
-}
-type SerializeCapable = string | SerializeCapableObject | number | boolean
+export type EventsObject = Partial<ChildProcessListenerMap>
 
-export interface EventMap {
-  close: (code: number, signal: NodeJS.Signals) => void
-  disconnect: () => void
-  error: (error: Error) => void
-  exit: (code: number | null, signal: NodeJS.Signals | null) => void
-  message: (message: SerializeCapable, sendHandle: Socket | Server) => void
-}
-
-export type EventType = keyof EventMap
-
-interface EventItemFromType<T extends EventType> {
+interface SpecificEventItem<T extends ChildProcessEventType> {
   event: T
-  listener: EventMap[T]
+  listener: ChildProcessListenerMap[T]
 }
-export type EventItem<T extends EventType = EventType> = T extends EventType ? EventItemFromType<T> : never
+
+export type EventItem<T extends ChildProcessEventType = ChildProcessEventType> = T extends ChildProcessEventType ? SpecificEventItem<T> : never
 export type EventList = readonly EventItem[]
 
 export interface SpawnProcessOptions extends SpawnOptions {
@@ -29,7 +17,7 @@ export interface SpawnProcessOptions extends SpawnOptions {
   readonly args?: readonly string[]
   readonly key?: string
   readonly global?: boolean | string
-  readonly events?: Partial<EventMap> | EventList
+  readonly events?: EventsObject | EventList
   readonly setup?: (proc: ChildProcess) => void
   readonly cleanup?: (proc: ChildProcess) => void
 }

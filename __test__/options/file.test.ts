@@ -11,11 +11,11 @@ describe('"file" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup, file: 'dist/out.js' })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ file: 'dist/index.js' })
+      await write({ file: 'dist/index.js' })
     })
 
     expect(setup).toHaveBeenCalledTimes(1)
@@ -32,11 +32,11 @@ describe('"file" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ file })
+      await write({ file })
     })
 
     expect(setup).toHaveBeenCalledTimes(1)
@@ -52,11 +52,11 @@ describe('"file" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ dir: 'dist' })
+      await write({ dir: 'dist' })
     })
 
     expect(setup).toHaveBeenCalledTimes(1)
@@ -72,11 +72,11 @@ describe('"file" option', () => {
 
     await mockCWD(async () => {
       const plugin = spawnProcess({ setup, file: null })
-      const build = await rollup({
+      const { write } = await rollup({
         input: 'src/index.js',
         plugins: [plugin],
       })
-      await build.write({ dir: 'dist' })
+      await write({ dir: 'dist' })
     })
 
     expect(setup).toHaveBeenCalledTimes(1)

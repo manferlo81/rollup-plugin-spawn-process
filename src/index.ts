@@ -1,9 +1,14 @@
 export { spawnProcess } from './plugin'
+
+export type {
+  ChildProcessListenerMap as EventMap,
+  ChildProcessEventType as EventType,
+} from './child-process'
+
 export type {
   EventItem,
   EventItem as EventItemFromMap,
   EventList,
-  EventMap,
-  EventType,
+  EventsObject,
   SpawnProcessOptions,
 } from './types'
