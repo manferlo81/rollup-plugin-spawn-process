@@ -5,27 +5,19 @@ import { normalizeEventList } from './normalize-events'
 import { createFileNameResolver } from './resolve-file'
 import type { SpawnProcessOptions } from './types'
 
-export function spawnProcess(options?: SpawnProcessOptions): Plugin {
-
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  options = options || {}
+export function spawnProcess(options: SpawnProcessOptions = {}): Plugin {
 
   const {
-    command: commandOption,
+    command = 'node',
     file,
     args,
-    key,
+    key: contextKey = 'spawn-process',
     global: globalOption,
     events: eventsOption,
     setup,
     cleanup,
     ...spawnOptions
   } = options
-
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const command = commandOption || 'node'
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const contextKey = key || 'spawn-process'
 
   const resolveFilename = createFileNameResolver(file)
   const context = getContext(globalOption)
@@ -61,11 +53,10 @@ export function spawnProcess(options?: SpawnProcessOptions): Plugin {
       // resolve filename to pass
       const filename = resolveFilename(outputOptions, bundle)
 
-      // create file argument
-      const fileArg = filename ? [filename] : []
-
       // create spawn arguments
-      const spawnArgs = args ? [...fileArg, ...args] : fileArg
+      const spawnArgs = args
+        ? filename ? [filename, ...args] : args
+        : filename ? [filename] : []
 
       // create child precess
       const proc = crossSpawn(

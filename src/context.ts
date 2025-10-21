@@ -3,8 +3,7 @@ import type { Context, GlobalObject } from './private-types'
 function resolveGlobalKey(option?: string | boolean): string | null {
 
   // normalize global key from option
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const globalKey = option == null ? Boolean(process.env.ROLLUP_WATCH) : option
+  const globalKey = option ?? Boolean(process.env.ROLLUP_WATCH)
 
   // return null if key if not a string or true
   if (!globalKey) return null
