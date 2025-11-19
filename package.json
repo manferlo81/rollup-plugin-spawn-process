@@ -49,8 +49,8 @@
     "cross-spawn": "^7.0.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
     "@stylistic/eslint-plugin": "^5.5.0",
     "@types/cross-spawn": "^6.0.6",
     "@types/jest": "^30.0.0",
@@ -58,7 +58,7 @@
     "@types/node": "^24.9.1",
     "bundlib": "^0.21.9",
     "chokidar": "^4.0.3",
-    "core-js": "^3.46.0",
+    "core-js": "^3.47.0",
     "eslint": "^9.38.0",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import-x": "^4.16.1",
